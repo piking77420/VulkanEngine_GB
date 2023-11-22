@@ -132,6 +132,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -172,6 +173,7 @@
     <ClInclude Include="source\include\External\GLFW\glfw3.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3native.h" />
     <ClInclude Include="source\include\Renderer\Vulkan\Device.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\Shader.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanInit.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanSwapChain.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkFrame.hpp" />

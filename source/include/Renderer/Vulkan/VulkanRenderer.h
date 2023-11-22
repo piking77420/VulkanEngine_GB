@@ -39,7 +39,7 @@ public:
 		m_Instance.destroySurfaceKHR(m_Surface);
 		m_Instance.destroy();
 
-		std::cout << " End Of Engine \n";
+		std::cout << " End Of Vulkan \n";
 
 	}
 

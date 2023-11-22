@@ -20,7 +20,7 @@ public:
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 		m_Window = glfwCreateWindow(m_Widht, m_Height, "Vulkan window", nullptr, nullptr);
 		m_VulkanRenderer.InitVulkan(m_Window);
-		
+
 		
 	}
 

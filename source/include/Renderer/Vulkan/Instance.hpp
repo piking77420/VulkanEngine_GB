@@ -155,7 +155,7 @@ namespace vkInit
 		{
 			if (_debug)
 			{
-				std::cout << "Failed to Creqte Instance " << '\n';
+				CORE_LOG_ERROR("Failed to Create Instance " << '\n');
 			}
 			return nullptr;
 		}
