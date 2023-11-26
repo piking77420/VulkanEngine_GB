@@ -4,9 +4,8 @@
 
 int main()
 {
-	Engine engine;
-	engine.EngineInit();
-	engine.EngineRun();
-	engine.DestroyEngine();
+	Engine* engine = new Engine();
+	engine->EngineRun();
+	delete engine;
 	return 0;
 }

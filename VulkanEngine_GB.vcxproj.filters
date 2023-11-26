@@ -51,19 +51,25 @@
     <ClCompile Include="source\src\Core\Math\Vector4.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="source\include\Renderer\Vulkan\VulkhanLog.hpp">
+    <ClCompile Include="source\include\Renderer\Vulkan\ValidationLayers.hpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="source\src\Renderer\Vulkan\VulkanLog.cpp">
+    <ClCompile Include="source\src\Renderer\Vulkan\ValidationLayers.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="source\include\Renderer\Vulkan\Instance.hpp">
+    <ClCompile Include="source\include\Renderer\Vulkan\PhysicalDevice.hpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="source\include\Renderer\Vulkan\QueuFamilies.hpp">
+    <ClCompile Include="source\src\Renderer\Vulkan\PhysicalDevice.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="source\src\Renderer\VulkanRenderer.cpp">
+    <ClCompile Include="source\src\Renderer\Vulkan\QueueFamily.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\src\Renderer\Vulkan\Device.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\src\Renderer\Vulkan\VulkanInstance.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,25 +122,16 @@
     <ClInclude Include="source\include\Core\Math\Vector4.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\Renderer\Vulkan\config.hpp">
+    <ClInclude Include="source\include\Renderer\Vulkan\QueueFamily.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
     <ClInclude Include="source\include\Renderer\Vulkan\Device.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\Renderer\Vulkan\VulkanInit.hpp">
+    <ClInclude Include="source\include\Renderer\Vulkan\VulkanInstance.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\Renderer\Vulkan\VulkanSwapChain.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\Renderer\Vulkan\VulkFrame.hpp">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\Renderer\Vulkan\VulkanRenderer.h">
-      <Filter>Fichiers d%27en-tête</Filter>
-    </ClInclude>
-    <ClInclude Include="source\include\Renderer\Vulkan\Shader.hpp">
+    <ClInclude Include="source\include\Renderer\Vulkan\VulkanHeader.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
