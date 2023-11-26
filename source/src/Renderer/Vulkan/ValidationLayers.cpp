@@ -1,6 +1,6 @@
 #include "Renderer/Vulkan/ValidationLayers.hpp"
-#include <GLFW/glfw3.h>
 #include "Engine.hpp"
+#include "Renderer/Vulkan/VulkanHeader.hpp"
 
 using namespace VkInit;
 

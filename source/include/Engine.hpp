@@ -1,6 +1,6 @@
 #pragma once
+#define GLFW_INCLUDE_VULKAN
 #include <Core/Core.h>
-#include <GLFW/glfw3.h>
 #include "Renderer/Vulkan/VulkanHeader.hpp"
 
 #ifdef NDEBUG
@@ -31,14 +31,7 @@ public:
 
 	~Engine()
 	{
-		if (enableValidationLayers) 
-		{
-			VkInit::DestroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
-		}
-
-
-		vkDestroyInstance(m_instance, nullptr);
-
+		CleanUpVulkan();
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}
@@ -50,17 +43,29 @@ private:
 	GLFWwindow* m_Window = nullptr;	
 	VkInstance m_instance;
 	VkDebugUtilsMessengerEXT m_debugMessenger;
+	VkSurfaceKHR m_surface;
+
+
 	VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 	VkDevice m_device;
+
 	VkQueue m_graphicsQueue;
+	VkQueue m_presentQueue;
 
+	VkSwapchainKHR m_swapChain;
+	std::vector<VkImage> m_swapChainImages;
+	VkFormat m_swapChainImageFormat;
+	VkExtent2D m_swapChainExtent;
 
+	std::vector<VkImageView> m_swapChainImageViews;
 
     const std::vector<const char*> validationLayers = {
         "VK_LAYER_KHRONOS_validation"
     };
 
-
+	const std::vector<const char*> deviceExtensions = {
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
+	};
 
 	void InitWindow()
 	{
@@ -74,11 +79,31 @@ private:
 	{
 		VulkanInstance::CreateInstance(&m_instance,validationLayers);
 		VkInit::SetupDebugMessenger(m_instance,&m_debugMessenger);
-		PhysicalDevice::PickPhysicalDevice(m_instance, m_physicalDevice);
-		Device::CreateLogicalDevice(m_device, m_physicalDevice, validationLayers, m_graphicsQueue);
+		VkInit::CreateSurface(&m_instance,m_Window,&m_surface);
+		VkInit::PickPhysicalDevice(m_instance, m_physicalDevice, m_surface);
+		Device::CreateLogicalDevice(m_device, m_physicalDevice, validationLayers, m_graphicsQueue,m_surface,deviceExtensions);
+		VkUtils::CreateSwapChain(m_Window,m_physicalDevice,m_surface,m_swapChain,m_device,m_swapChainImages,m_swapChainImageFormat,m_swapChainExtent);
+		VkUtils::CreateImageViews(m_swapChainImages, m_swapChainImageFormat, m_swapChainImageViews, m_device);
 	}
 
-	
+	void CleanUpVulkan()
+	{
+		for (auto imageView : m_swapChainImageViews) {
+			vkDestroyImageView(m_device, imageView, nullptr);
+		}
+
+
+		vkDestroySwapchainKHR(m_device, m_swapChain, nullptr);
+		vkDestroyDevice(m_device, nullptr);
+
+		if (enableValidationLayers) {
+			VkInit::DestroyDebugUtilsMessengerEXT(m_instance, m_debugMessenger, nullptr);
+		}
+
+		vkDestroySurfaceKHR(m_instance, m_surface, nullptr);
+		vkDestroyInstance(m_instance, nullptr);
+	}
+
 
 
 

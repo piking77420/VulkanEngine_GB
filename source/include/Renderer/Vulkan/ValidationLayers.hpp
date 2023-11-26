@@ -1,6 +1,6 @@
 #pragma once
-#include <vulkan/vulkan.hpp>
-#include "Core/Core.h"
+#include "VulkanConfig.hpp"
+
 
 
 namespace VkInit

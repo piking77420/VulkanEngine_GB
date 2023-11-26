@@ -136,7 +136,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Renderer\Vulkan\ImageView.cpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\PhysicalDevice.hpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\SwapChain.cpp" />
+    <ClCompile Include="source\include\Renderer\Vulkan\SwapChain.hpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\ValidationLayers.hpp" />
     <ClCompile Include="source\src\Core\Math\Mathf.cpp" />
     <ClCompile Include="source\src\Core\Math\Matrix.cpp" />
@@ -153,6 +156,7 @@
     <ClCompile Include="source\src\Renderer\Vulkan\Device.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\PhysicalDevice.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\QueueFamily.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\Surface.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\ValidationLayers.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanInstance.cpp" />
   </ItemGroup>
@@ -174,7 +178,10 @@
     <ClInclude Include="source\include\External\GLFW\glfw3.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3native.h" />
     <ClInclude Include="source\include\Renderer\Vulkan\Device.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\ImageView.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\QueueFamily.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\Surface.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VulkanConfig.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanHeader.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanInstance.hpp" />
   </ItemGroup>

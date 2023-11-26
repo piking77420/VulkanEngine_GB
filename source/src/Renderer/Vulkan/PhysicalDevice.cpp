@@ -1,7 +1,8 @@
 #include "Renderer/Vulkan/PhysicalDevice.hpp"
 #include "Renderer/Vulkan/QueueFamily.hpp"
 
-QueueFamilyIndices PhysicalDevice::FindQueueFamilies(VkPhysicalDevice device) {
+QueueFamilyIndices VkInit::FindQueueFamilies(VkPhysicalDevice& device,VkSurfaceKHR& _surface) 
+{
     QueueFamilyIndices indices;
 
     uint32_t queueFamilyCount = 0;
@@ -16,6 +17,13 @@ QueueFamilyIndices PhysicalDevice::FindQueueFamilies(VkPhysicalDevice device) {
             indices.graphicsFamily = i;
         }
 
+        VkBool32 presentSupport = false;
+        vkGetPhysicalDeviceSurfaceSupportKHR(device, i, _surface, &presentSupport);
+
+        if (presentSupport) {
+            indices.presentFamily = i;
+        }
+
         if (indices.isComplete()) {
             break;
         }
@@ -27,15 +35,14 @@ QueueFamilyIndices PhysicalDevice::FindQueueFamilies(VkPhysicalDevice device) {
 }
 
 
-
-bool PhysicalDevice::IsDeviceSuitable(VkPhysicalDevice device)
+bool VkInit::IsDeviceSuitable(VkPhysicalDevice device,VkSurfaceKHR& _surface)
 {
-    QueueFamilyIndices indices = FindQueueFamilies(device);
+    QueueFamilyIndices indices = VkInit::FindQueueFamilies(device, _surface);
 
     return indices.isComplete();
 }
 
-void PhysicalDevice::PickPhysicalDevice(VkInstance instance,VkPhysicalDevice& _physicalDevice)
+void VkInit::PickPhysicalDevice(VkInstance instance,VkPhysicalDevice& _physicalDevice, VkSurfaceKHR& _surface)
 {
     uint32_t deviceCount = 0;
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
@@ -48,7 +55,7 @@ void PhysicalDevice::PickPhysicalDevice(VkInstance instance,VkPhysicalDevice& _p
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
     for (const auto& device : devices) {
-        if (PhysicalDevice::IsDeviceSuitable(device)) {
+        if (VkInit::IsDeviceSuitable(device, _surface)) {
             _physicalDevice = device;
             break;
         }
