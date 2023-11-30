@@ -179,6 +179,9 @@
     <ClInclude Include="source\include\Renderer\Vulkan\FrameBuffer.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="source\include\Renderer\Vulkan\Vertex.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Library Include="source\src\External\Lib\glfw3.lib" />

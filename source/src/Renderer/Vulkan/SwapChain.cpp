@@ -3,27 +3,9 @@
 #include "Renderer/Vulkan/QueueFamily.hpp"
 
 
-VkSurfaceFormatKHR VkUtils::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
-{
-    for (const auto& availableFormat : availableFormats) {
-        if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
-            return availableFormat;
-        }
-    }
 
-    return availableFormats[0];
-}
 
-VkPresentModeKHR VkUtils::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
-{
-    for (const auto& availablePresentMode : availablePresentModes) {
-        if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
-            return availablePresentMode;
-        }
-    }
 
-    return VK_PRESENT_MODE_FIFO_KHR;
-}
 
 VkExtent2D VkUtils::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* _window)
 {
@@ -75,7 +57,7 @@ SwapChainSupportDetails VkUtils::QuerySwapChainSupport(VkPhysicalDevice& device,
 void VkUtils::CreateSwapChain(GLFWwindow* _window,VkPhysicalDevice& _physicalDevice, VkSurfaceKHR& surface, VkSwapchainKHR& _swapChain, VkDevice& _device
     , std::vector<VkImage>& _swapChainImages, VkFormat& _swapChainImageFormat, VkExtent2D& _swapChainExtent)
 {
-    SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(_physicalDevice, surface);
+    SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(_physicalDevice,surface);
 
     VkSurfaceFormatKHR surfaceFormat = ChooseSwapSurfaceFormat(swapChainSupport.formats);
     VkPresentModeKHR presentMode = ChooseSwapPresentMode(swapChainSupport.presentModes);
@@ -97,7 +79,7 @@ void VkUtils::CreateSwapChain(GLFWwindow* _window,VkPhysicalDevice& _physicalDev
     createInfo.imageArrayLayers = 1;
     createInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    QueueFamilyIndices indices = VkInit::FindQueueFamilies(_physicalDevice, surface);
+    QueueFamilyIndices indices = VkInit::FindQueueFamilies(_physicalDevice,surface);
     uint32_t queueFamilyIndices[] = { indices.graphicsFamily.value(), indices.presentFamily.value() };
 
     if (indices.graphicsFamily != indices.presentFamily) {
@@ -119,7 +101,6 @@ void VkUtils::CreateSwapChain(GLFWwindow* _window,VkPhysicalDevice& _physicalDev
     if (vkCreateSwapchainKHR(_device, &createInfo, nullptr, &_swapChain) != VK_SUCCESS) {
         throw std::runtime_error("failed to create swap chain!");
     }
-
     vkGetSwapchainImagesKHR(_device, _swapChain, &imageCount, nullptr);
     _swapChainImages.resize(imageCount);
     vkGetSwapchainImagesKHR(_device, _swapChain, &imageCount, _swapChainImages.data());
@@ -127,4 +108,5 @@ void VkUtils::CreateSwapChain(GLFWwindow* _window,VkPhysicalDevice& _physicalDev
     _swapChainImageFormat = surfaceFormat.format;
     _swapChainExtent = extent;
     CORE_LOG_SUCCESS("Succed to create Swapchain \n");
+
 }

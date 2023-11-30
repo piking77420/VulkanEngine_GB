@@ -189,6 +189,7 @@
     <ClInclude Include="source\include\Renderer\Vulkan\ImageView.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\QueueFamily.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Surface.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\Vertex.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanConfig.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanHeader.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanInstance.hpp" />

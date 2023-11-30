@@ -12,6 +12,7 @@ public:
 
 	void EngineRun()
 	{
+
 		while (!glfwWindowShouldClose(m_Window)) {
 			glfwPollEvents();
 			m_VkRenderer.Draw();
@@ -24,16 +25,19 @@ public:
 	Engine()
 	{
 		InitWindow();
-		m_VkRenderer.InitVulkan(m_Window);
+		m_VkRenderer.GetWindow(m_Window);
+		m_VkRenderer.InitVulkan();
 	}
 
 	~Engine()
 	{
-		//CleanUpVulkan();
+		
 		m_VkRenderer.CleanUpVulkan();
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
 	}
+
+
 
 private:
 	
@@ -45,11 +49,21 @@ private:
 	void InitWindow()
 	{
 		glfwInit();
+
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
+
 		m_Window = glfwCreateWindow(m_Widht, m_Height, "Vulkan window", nullptr, nullptr);
+		// &m_VkRenderer is correct dont move it 
+		glfwSetWindowUserPointer(m_Window, &m_VkRenderer);
+		glfwSetFramebufferSizeCallback(m_Window, FramebufferResizeCallback);
+
 	}
 
-	
+
+	static void FramebufferResizeCallback(GLFWwindow* window, int width, int height)
+	{
+		auto vulkanRenderer = reinterpret_cast<VulkanRenderer*>(glfwGetWindowUserPointer(window));
+		vulkanRenderer->framebufferResized = true;
+	}
 };
 
