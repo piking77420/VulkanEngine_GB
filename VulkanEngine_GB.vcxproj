@@ -136,7 +136,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\include\Renderer\Vulkan\GraphicPipeline.hpp" />
+    <ClCompile Include="source\include\Renderer\Vulkan\VulkanRenderer.hpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\VulkanShader.hpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\FrameBuffer.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\GraphicPipeline.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\ImageView.cpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\PhysicalDevice.hpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\SwapChain.cpp" />
@@ -160,6 +164,8 @@
     <ClCompile Include="source\src\Renderer\Vulkan\Surface.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\ValidationLayers.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanInstance.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VulkanRenderer.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VulkanShader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\include\Core\Math\EasyFunction.h" />
