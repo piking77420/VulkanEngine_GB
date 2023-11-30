@@ -66,6 +66,7 @@ public:
 		CreateGraphicsPipeline();
 		CreateFramebuffers();
 		CreateCommandPool();
+		CreateVertexBuffer();
 		CreateCommandBuffer();
 		CreateSyncObjects();
 	}
@@ -144,12 +145,11 @@ private:
 	VkBuffer m_vertexBuffer;
 	VkDeviceMemory m_vertexBufferMemory;
 
-
-	const std::vector<Vertex> vertices = {
-		{{0.0f, -0.5f}, {1.0f, 0.0f, 0.0f}},
-		{{0.5f, 0.5f}, {0.0f, 2.0f, 0.0f}},
-		{{-0.5f, 0.5f}, {0.0f, 0.0f, 1.0f}}
-	};
+	std::vector<Vertex> vertices = {
+		{{0.0f, -0.5f,0.0 }, {1.0f, 1.0f, 1.0f}},
+		{{0.5f, 0.5f,0.0}, {0.0f, 1.0f, 0.0f}},
+		{{-0.5f, 0.5f,0.0 }, {0.0f, 0.0f, 1.0f}}
+	};;
 
 	const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation"

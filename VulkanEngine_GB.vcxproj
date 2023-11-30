@@ -163,6 +163,7 @@
     <ClCompile Include="source\src\Renderer\Vulkan\QueueFamily.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\Surface.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\ValidationLayers.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\Vertex.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanInstance.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanRenderer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanShader.cpp" />
