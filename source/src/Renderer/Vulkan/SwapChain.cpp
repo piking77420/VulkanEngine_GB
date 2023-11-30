@@ -2,7 +2,6 @@
 #include "Renderer/Vulkan/PhysicalDevice.hpp"
 #include "Renderer/Vulkan/QueueFamily.hpp"
 
-using namespace VkUtils;
 
 VkSurfaceFormatKHR VkUtils::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats)
 {
@@ -13,6 +12,17 @@ VkSurfaceFormatKHR VkUtils::ChooseSwapSurfaceFormat(const std::vector<VkSurfaceF
     }
 
     return availableFormats[0];
+}
+
+VkPresentModeKHR VkUtils::ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
+{
+    for (const auto& availablePresentMode : availablePresentModes) {
+        if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+            return availablePresentMode;
+        }
+    }
+
+    return VK_PRESENT_MODE_FIFO_KHR;
 }
 
 VkExtent2D VkUtils::ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* _window)
@@ -68,7 +78,7 @@ void VkUtils::CreateSwapChain(GLFWwindow* _window,VkPhysicalDevice& _physicalDev
     SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(_physicalDevice, surface);
 
     VkSurfaceFormatKHR surfaceFormat = ChooseSwapSurfaceFormat(swapChainSupport.formats);
-    VkPresentModeKHR presentMode = chooseSwapPresentMode(swapChainSupport.presentModes);
+    VkPresentModeKHR presentMode = ChooseSwapPresentMode(swapChainSupport.presentModes);
     VkExtent2D extent = ChooseSwapExtent(swapChainSupport.capabilities,_window);
 
     uint32_t imageCount = swapChainSupport.capabilities.minImageCount + 1;

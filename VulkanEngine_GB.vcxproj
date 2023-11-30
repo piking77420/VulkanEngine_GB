@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\include\Renderer\Vulkan\VulkanShader.hpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\ImageView.cpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\PhysicalDevice.hpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\SwapChain.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="source\include\External\GLFW\glfw3.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3native.h" />
     <ClInclude Include="source\include\Renderer\Vulkan\Device.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\FrameBuffer.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\ImageView.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\QueueFamily.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Surface.hpp" />

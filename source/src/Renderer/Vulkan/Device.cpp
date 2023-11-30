@@ -3,7 +3,7 @@
 #include "Renderer/Vulkan/QueueFamily.hpp"
 #include "Renderer/Vulkan/PhysicalDevice.hpp"
 
-void Device::CreateLogicalDevice(VkDevice& _device,VkPhysicalDevice& _physicalDevice,const std::vector<const char*> _validationLayers, VkQueue& _graphicsQueue, VkSurfaceKHR& _surface, const std::vector<const char*> _deviceExtensions)
+void Device::CreateLogicalDevice(VkDevice& _device,VkPhysicalDevice& _physicalDevice,const std::vector<const char*> _validationLayers, VkQueue& _graphicsQueue, VkQueue& _presentQueue, VkSurfaceKHR& _surface, const std::vector<const char*> _deviceExtensions)
 {
     QueueFamilyIndices indices = VkInit::FindQueueFamilies(_physicalDevice,_surface);
 
@@ -46,7 +46,8 @@ void Device::CreateLogicalDevice(VkDevice& _device,VkPhysicalDevice& _physicalDe
     }
 
     vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &_graphicsQueue);
-
+    vkGetDeviceQueue(_device, indices.presentFamily.value(), 0, &_presentQueue);
     CORE_LOG_SUCCESS("Succeed to create Device \n");
-    vkGetDeviceQueue(_device, indices.graphicsFamily.value(), 0, &_graphicsQueue);
+
+
 }
