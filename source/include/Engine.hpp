@@ -2,8 +2,8 @@
 #define GLFW_INCLUDE_VULKAN
 #include <Core/Core.h>
 #include "Renderer/Vulkan/VulkanRenderer.hpp"
-
-
+#include "Core/ECS/Scene.hpp"
+#include "Physics/GraphScene.h"
 
 
 class Engine
@@ -15,8 +15,9 @@ public:
 
 		while (!glfwWindowShouldClose(m_Window)) {
 			glfwPollEvents();
+			scene.FixedUpdate();
+			scene.Update();
 			m_VkRenderer.Draw();
-
 		}
 		m_VkRenderer.RendererWait();
 	}
@@ -27,6 +28,9 @@ public:
 		InitWindow();
 		m_VkRenderer.GetWindow(m_Window);
 		m_VkRenderer.InitVulkan();
+		scene.CreateEntity();
+		scene.AddSystem<GraphScene>();
+		scene.Begin();
 	}
 
 	~Engine()
@@ -45,6 +49,7 @@ private:
 	const std::uint32_t m_Height{ 600 };
 	GLFWwindow* m_Window = nullptr;	
 	VulkanRenderer m_VkRenderer;
+	Scene scene;
 
 	void InitWindow()
 	{

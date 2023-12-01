@@ -136,9 +136,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Physics\GraphScene.cpp" />
+    <ClCompile Include="source\include\Core\ECS\ComponentPtr.hpp" />
+    <ClCompile Include="source\include\Core\ECS\IRegisterComponent.hpp" />
+    <ClCompile Include="source\src\Core\ECS\Scene.cpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\GraphicPipeline.hpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\VulkanRenderer.hpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\VulkanShader.hpp" />
+    <ClCompile Include="source\src\Physics\Transform.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\FrameBuffer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\GraphicPipeline.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\ImageView.cpp" />
@@ -167,8 +172,12 @@
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanInstance.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanRenderer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanShader.cpp" />
+    <ClCompile Include="source\src\Core\ECS\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\Physics\GraphScene.h" />
+    <ClInclude Include="source\include\Core\ECS\Component.hpp" />
+    <ClInclude Include="source\include\Core\ECS\Scene.hpp" />
     <ClInclude Include="source\include\Core\Math\EasyFunction.h" />
     <ClInclude Include="source\include\Core\Math\Mathf.h" />
     <ClInclude Include="source\include\Core\Math\Matrix.h" />
@@ -185,6 +194,7 @@
     <ClInclude Include="source\include\Core\Core.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3native.h" />
+    <ClInclude Include="source\include\Physics\Transform.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Device.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\FrameBuffer.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\ImageView.hpp" />
@@ -194,6 +204,7 @@
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanConfig.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanHeader.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanInstance.hpp" />
+    <ClInclude Include="source\include\Core\ECS\System.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="source\src\External\Lib\glfw3.lib" />

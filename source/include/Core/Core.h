@@ -7,6 +7,8 @@
 #include <vector>
 #include <array>
 #include <utility>
+#include <functional>
+#include <limits>
 
 #include <queue>
 #include <map>
