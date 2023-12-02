@@ -1,6 +1,6 @@
 #pragma once
 #include <iostream>
-#include<cassert>
+#include <cassert>
 #include "Vector3.h"
 
 class Vector2;

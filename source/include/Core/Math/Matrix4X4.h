@@ -29,17 +29,6 @@ public:
 	*/
 	Vector4 Colums[4];
 
-	/**
-	* @fn inline Vector3 GetPos();
-	* @brief This function Return the Translation of the matrix.
-	* @return m30 m31 m32 m33.
-	*/
-	inline Vector3 GetPos()
-	{
-		return static_cast<Vector3>(Colums[3]);
-	}
-
-
 #pragma region GraphicMatrix
 
 	/**
@@ -130,11 +119,11 @@ public:
 
 		// Compute X scale factor and normalize first row.
 		scale.x = Row[0].Norm();
-		Row[0] = Vector3::scale(Row[0], 1.f);
+		Row[0] = Vector3::Scale(Row[0], 1.f);
 		scale.y = Row[1].Norm();
-		Row[1] = Vector3::scale(Row[1], 1.f);
+		Row[1] = Vector3::Scale(Row[1], 1.f);
 		scale.z = Row[2].Norm();
-		Row[2] = Vector3::scale(Row[2], 1.f);
+		Row[2] = Vector3::Scale(Row[2], 1.f);
 
 
 

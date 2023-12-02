@@ -5,9 +5,10 @@
 namespace Math
 {
 	template<class T>
-	constexpr float Lerp(const T& t0, const T& t2, float t)
+	[[nodiscard]]
+	constexpr T Lerp(const T& t0, const T& t2, float t)
 	{
-		return (1 - t) * t0 + t * t2;
+		return t0 * (1 - t) + t2 * t;
 	}
 
 	template<class T>

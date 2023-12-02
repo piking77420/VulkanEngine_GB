@@ -7,6 +7,8 @@
 #include "Renderer/Vulkan/SwapChain.hpp"
 #include "Renderer/Vulkan/ImageView.hpp"
 #include "Renderer/Vulkan/VulkanShader.hpp"
+#include "Renderer/Vulkan/FrameBuffer.hpp"
+#include "Buffer.hpp"
 #include "QueueFamily.hpp"
 #include "Vertex.hpp"
 

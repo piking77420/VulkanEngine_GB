@@ -31,7 +31,6 @@ struct ComponentDataInfo
 	CompCreateFunc CreecompFunc = nullptr;
 	FreeFunc freeFunc = nullptr;
 	size_t Size = -1;
-
 };
 
 class ComponentRegister
@@ -47,6 +46,7 @@ public:
 		CdataInfo.freeFunc = freeFunc;
 		CdataInfo.Size = size;
 
+		
 
 		ComponentsInfo.insert(std::make_pair(index, CdataInfo));
 

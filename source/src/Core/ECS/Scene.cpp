@@ -16,7 +16,7 @@ void Scene::AddComponentInternal(Entity& entity, uint32_t ComponentID,Component*
 
 	creatfunc(data,entity, ptr);
 	SetComponentIdToEntity(entity, ComponentID, index);
-}
+}	
 
 void Scene::RemoveComponentInternal(Entity& entity, uint32_t ComponentID)
 {

@@ -36,6 +36,9 @@ public :
 	template<class T>
 	inline T* AddComponent(Entity& entity)
 	{
+
+		static_assert(std::is_base_of<Component, T>::value, "T is not a subclass of Component");
+
 		if (HasComponent<T>(entity))
 			return nullptr;
 
@@ -48,6 +51,9 @@ public :
 	template<class T>
 	inline T* GetComponent(const Entity& entity)
 	{
+		static_assert(std::is_base_of<Component, T>::value, "T is not a subclass of Component");
+
+
 		if (!HasComponent<T>(entity))
 			return nullptr;
 		
@@ -96,6 +102,19 @@ public :
 	{
 		return reinterpret_cast<std::vector<T>*>(&componentData[T::ID]);
 	}
+
+	template<class T>
+	std::vector<std::vector<T>*>* GetAllComponentFrom()
+	{
+		std::vector<std::vector<T>*>* dataOfAllComponent;
+
+		
+
+
+
+		return reinterpret_cast<std::vector<T>*>(&componentData[T::ID]);
+	}
+
 
 	template<class T>
 	void AddSystem()

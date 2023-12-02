@@ -35,19 +35,6 @@ Vector2::operator Vector4() const
 	return Vector4(x, y, 0, 0);
 }
 
-
-
-
-
-
-
-
-constexpr inline float Vector2::Norm() const
-{
-	return (float)Math::FSqrtf(x * x + y * y );
-}
-
-
 float Vector2::Angle() const
 {
 	return std::atan2f(x, y);

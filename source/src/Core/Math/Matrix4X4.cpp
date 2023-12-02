@@ -4,15 +4,6 @@
 #include "Vector.h"
 
 
-
-
-
-
-
-
-
-
-
 Matrix4X4 Matrix4X4::RotationX4X4(const float& angle)
 {
 	Matrix4X4 result;
