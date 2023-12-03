@@ -32,15 +32,12 @@ namespace VkClass
         VkSampler textureSampler;
 
     protected:
-        void CreateVKImage(VulkanRendererData& vulkanRendererData, int32_t width, uint32_t height,
-            VkFormat format, VkImageTiling tiling, 
-            VkImageUsageFlags usage, VkMemoryPropertyFlags properties,
-            VkImage& image, VkDeviceMemory& imageMemory);
 
-        void CreateTextureImageView(VulkanRendererData& vulkanRendererData);
+
 
         void CreateTextureSampler(VulkanRendererData& vulkanRendererData);
-       
+
+        void CreateTextureImageView(VulkanRendererData& vulkanRendererData);
 
 
     };

@@ -3,6 +3,7 @@
 #include <stb_image.h>
 #include "Renderer/Vulkan/Buffer.hpp"
 #include "Renderer/Vulkan/ImageView.hpp"
+#include "Renderer/Vulkan/VkImage.hpp"
 
 void VkClass::VkTexture::LoadImage(const std::string& path, VulkanRendererData& vulkanRendererData)
 {
@@ -45,7 +46,7 @@ void VkClass::VkTexture::LoadImage(const std::string& path, VulkanRendererData& 
     imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
 
 
-    CreateVKImage(vulkanRendererData,texWidth, texHeight, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
+    VkUtils::CreateVKImage(vulkanRendererData,texWidth, texHeight, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
 
     VkUtils::TransitionImageLayout(vulkanRendererData,textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
     VkUtils::CopyBufferToImage(vulkanRendererData,stagingBuffer, textureImage, static_cast<uint32_t>(texWidth), static_cast<uint32_t>(texHeight));
@@ -60,46 +61,10 @@ void VkClass::VkTexture::LoadImage(const std::string& path, VulkanRendererData& 
 
 
 
-void VkClass::VkTexture::CreateVKImage(VulkanRendererData& vulkanRendererData, int32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory)
-{
-    VkImageCreateInfo imageInfo{};
-
-    imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
-    imageInfo.imageType = VK_IMAGE_TYPE_2D;
-    imageInfo.extent.width = width;
-    imageInfo.extent.height = height;
-    imageInfo.extent.depth = 1;
-    imageInfo.mipLevels = 1;
-    imageInfo.arrayLayers = 1;
-    imageInfo.format = format;
-    imageInfo.tiling = tiling;
-    imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
-    imageInfo.usage = usage;
-    imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
-    imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-    if (vkCreateImage(vulkanRendererData.device, &imageInfo, nullptr, &image) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create image!");
-    }
-
-    VkMemoryRequirements memRequirements;
-    vkGetImageMemoryRequirements(vulkanRendererData.device, image, &memRequirements);
-
-    VkMemoryAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = VkUtils::FindMemoryType(vulkanRendererData.physicalDevice,memRequirements.memoryTypeBits, properties);
-
-    if (vkAllocateMemory(vulkanRendererData.device, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate image memory!");
-    }
-
-    vkBindImageMemory(vulkanRendererData.device, image, imageMemory, 0);
-}
 
 void VkClass::VkTexture::CreateTextureImageView(VulkanRendererData& vulkanRendererData)
 {
-    textureImageView = VkUtils::CreateImageView(vulkanRendererData,textureImage, VK_FORMAT_R8G8B8A8_SRGB);
+    textureImageView = VkUtils::CreateImageView(vulkanRendererData,textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
 void VkClass::VkTexture::CreateTextureSampler(VulkanRendererData& vulkanRendererData)

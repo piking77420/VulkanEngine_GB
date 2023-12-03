@@ -136,8 +136,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\include\Renderer\Vulkan\VkFormat.cpp" />
     <ClCompile Include="source\src\Renderer\System\RendereMesh.cpp" />
     <ClCompile Include="source\src\Renderer\MeshRenderer.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VkImage.cpp" />
     <ClCompile Include="source\src\Resource\Model.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanLoadImage.cpp" />
     <ClCompile Include="source\src\Resource\Texture.cpp" />
@@ -201,6 +203,8 @@
     <ClInclude Include="source\include\External\Imgui\imstb_truetype.h" />
     <ClInclude Include="source\include\External\stb_image.h" />
     <ClInclude Include="source\include\External\tiny_obj_loader.h" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VkFormat.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VkImage.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanLoadImage.hpp" />
     <ClInclude Include="source\include\Resource\IResource.hpp" />
     <ClInclude Include="source\include\Resource\Model.hpp" />

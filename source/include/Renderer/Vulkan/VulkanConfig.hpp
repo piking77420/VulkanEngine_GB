@@ -63,4 +63,8 @@ struct VulkanRendererData
 	std::vector<VkDescriptorSet> descriptorSets;
 
 
+	VkImage depthImage;
+	VkDeviceMemory depthImageMemory;
+	VkImageView depthImageView;
+
 };

@@ -63,7 +63,10 @@ public:
 
 		CleanupSwapChain();
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
+
+
 		VkUtils::CreateImageViews(*this,swapChainImages, swapChainImageFormat, swapChainImageViews, device);
+
 		VkUtils::CreateFramebuffers(*this);
 
 	}
@@ -114,6 +117,9 @@ public:
 
 		CleanupSwapChain();
 
+		vkDestroyImageView(device, depthImageView, nullptr);
+		vkDestroyImage(device, depthImage, nullptr);
+		vkFreeMemory(device, depthImageMemory, nullptr);
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
 			vkDestroyBuffer(device, uniformBuffers[i], nullptr);
@@ -456,7 +462,9 @@ private:
 
 	void CreateDescriptorSets();
 	
+	void CreateDepthResources();
 
+	
 
 };
 

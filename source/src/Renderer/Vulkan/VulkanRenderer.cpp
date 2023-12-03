@@ -349,3 +349,14 @@ void VulkanRenderer::CreateDescriptorSets()
 		vkUpdateDescriptorSets(device, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
 	}
 }
+
+
+
+
+void VulkanRenderer::CreateDepthResources()
+{
+	VkFormat depthFormat = VkUtils::FindDepthFormat(this);
+
+	VkUtils::CreateVKImage(*this,swapChainExtent.width, swapChainExtent.height, depthFormat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
+	depthImageView = VkUtils::CreateImageView(*this,depthImage, depthFormat, VK_IMAGE_ASPECT_DEPTH_BIT);
+}
