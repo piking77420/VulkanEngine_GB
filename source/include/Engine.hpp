@@ -15,11 +15,12 @@ public:
 	void EngineRun()
 	{
 
-		while (!glfwWindowShouldClose(m_Window)) {
+		while (!glfwWindowShouldClose(m_Window))
+		{
 			glfwPollEvents();
 			scene.FixedUpdate();
 			scene.Update();
-			m_VkRenderer.Draw();
+			m_VkRenderer.Draw(&scene);
 		}
 		m_VkRenderer.RendererWait();
 		

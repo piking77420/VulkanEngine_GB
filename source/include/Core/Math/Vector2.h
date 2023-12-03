@@ -285,29 +285,29 @@ public:
 	
 
 
-	constexpr inline bool operator!=(const Vector2& vec2)
-	{
-		return x != vec2.x && y != vec2.y;
-	}
-
-	constexpr inline bool operator==(const Vector2& vec2)
-	{
-		return x == vec2.x && y == vec2.y;
-	}
-
-	constexpr inline bool operator<=(const Vector2& vec2)
-	{
-		return x <= vec2.x && y <= vec2.y;
-	}
-
-	constexpr inline bool operator>=(const Vector2& vec2)
-	{
-		return x >= vec2.x && y >= vec2.y;
-	}
 
 };
 
 
+constexpr inline bool operator!=(const Vector2& vec,const Vector2& vec2)
+{
+	return vec.x != vec2.x && vec.y != vec2.y;
+}
+
+constexpr inline bool operator==(const Vector2& vec, const Vector2& vec2)
+{
+	return vec.x == vec2.x && vec.y == vec2.y;
+}
+
+constexpr inline bool operator<=(const Vector2& vec, const Vector2& vec2)
+{
+	return vec.x <= vec2.x && vec.y <= vec2.y;
+}
+
+constexpr inline bool operator>=(const Vector2& vec, const Vector2& vec2)
+{
+	return vec.x >= vec2.x && vec.y >= vec2.y;
+}
 
 
 std::ostream& operator<<(std::ostream& stream, const Vector2& vec);

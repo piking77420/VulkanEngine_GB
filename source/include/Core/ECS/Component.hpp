@@ -95,4 +95,10 @@ struct Entity
 		Id = newId;
 		ComponentId.resize(ComponentRegister::GetSizeComponentType(), ComponentNull);
 	}
+
+
+	bool operator==(const Entity& entity) const
+	{
+		return Id == entity.Id;
+	}
 };

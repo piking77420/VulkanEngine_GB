@@ -1,4 +1,4 @@
-#include "Texture.hpp"
+#include "Resource/Texture.hpp"
 
 using namespace VkClass;
 

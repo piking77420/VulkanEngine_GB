@@ -3,10 +3,11 @@
 
 class GraphScene : public System
 {
-
-	virtual void Begin() override ;
+public:
+	virtual void Begin(Scene* scene) override ;
 	virtual void Update(Scene* scene) override ;
-	virtual void FixedUpdate() override ;
+	virtual void FixedUpdate(Scene* scene) override ;
+	virtual void Render(VulkanRendererData* datarenderer, Scene* scene) override;
 
 };
 

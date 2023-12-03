@@ -136,8 +136,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Renderer\System\RendereMesh.cpp" />
+    <ClCompile Include="source\src\Renderer\MeshRenderer.cpp" />
+    <ClCompile Include="source\src\Resource\Model.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanLoadImage.cpp" />
-    <ClCompile Include="source\include\Resource\Texture.cpp" />
+    <ClCompile Include="source\src\Resource\Texture.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_demo.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_draw.cpp" />
@@ -186,6 +189,8 @@
     <ClCompile Include="source\src\Core\ECS\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\Renderer\System\RendereMesh.hpp" />
+    <ClInclude Include="source\include\Renderer\MeshRenderer.h" />
     <ClInclude Include="source\include\External\Imgui\imconfig.h" />
     <ClInclude Include="source\include\External\Imgui\imgui.h" />
     <ClInclude Include="source\include\External\Imgui\imgui_impl_glfw.h" />
@@ -195,8 +200,10 @@
     <ClInclude Include="source\include\External\Imgui\imstb_textedit.h" />
     <ClInclude Include="source\include\External\Imgui\imstb_truetype.h" />
     <ClInclude Include="source\include\External\stb_image.h" />
+    <ClInclude Include="source\include\External\tiny_obj_loader.h" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanLoadImage.hpp" />
     <ClInclude Include="source\include\Resource\IResource.hpp" />
+    <ClInclude Include="source\include\Resource\Model.hpp" />
     <ClInclude Include="source\include\Resource\ResourceManager.hpp" />
     <ClInclude Include="source\include\Physics\GraphScene.h" />
     <ClInclude Include="source\include\Core\ECS\Component.hpp" />

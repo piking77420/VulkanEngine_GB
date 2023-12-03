@@ -147,7 +147,8 @@ namespace VkUtils
         EndSingleTimeCommands(VkrData, commandBuffer);
     }
 
-    static inline void CreateVertexBuffer(VulkanRendererData& VkrData, std::vector<Vertex>& vertices)
+    static inline void CreateVertexBuffer(VulkanRendererData& VkrData, std::vector<Vertex>& vertices , VkBuffer& vertexBuffer,
+    VkDeviceMemory& vertexBufferMemory)
     {
         VkDeviceSize bufferSize = sizeof(Vertex) * vertices.size();
 
@@ -160,15 +161,16 @@ namespace VkUtils
         memcpy(data, vertices.data(), (size_t)bufferSize);
         vkUnmapMemory(VkrData.device, stagingBufferMemory);
 
-        CreateBuffer(VkrData, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &VkrData.vertexBuffer, &VkrData.vertexBufferMemory);
+        CreateBuffer(VkrData, bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &vertexBuffer, &vertexBufferMemory);
 
-        CopyBuffer(VkrData, stagingBuffer, VkrData.vertexBuffer, bufferSize);
+        CopyBuffer(VkrData, stagingBuffer, vertexBuffer, bufferSize);
 
         vkDestroyBuffer(VkrData.device, stagingBuffer, nullptr);
         vkFreeMemory(VkrData.device, stagingBufferMemory, nullptr);
     }
 
-    static inline void CreateIndexBuffer(VulkanRendererData& VkrData, std::vector<uint16_t >& indices)
+    static inline void CreateIndexBuffer(VulkanRendererData& VkrData, std::vector<uint16_t >& indices ,VkBuffer& indexBuffer,
+        VkDeviceMemory& indexBufferMemory)
    {
         VkDeviceSize bufferSize = sizeof(indices[0]) * indices.size();
 
@@ -182,9 +184,9 @@ namespace VkUtils
         memcpy(data, indices.data(), (size_t)bufferSize);
         vkUnmapMemory(VkrData.device, stagingBufferMemory);
 
-        CreateBuffer(VkrData,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &VkrData.indexBuffer, &VkrData.indexBufferMemory);
+        CreateBuffer(VkrData,bufferSize, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDEX_BUFFER_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, &indexBuffer, &indexBufferMemory);
 
-        CopyBuffer(VkrData,stagingBuffer, VkrData.indexBuffer, bufferSize);
+        CopyBuffer(VkrData,stagingBuffer, indexBuffer, bufferSize);
 
         vkDestroyBuffer(VkrData.device, stagingBuffer, nullptr);
         vkFreeMemory(VkrData.device, stagingBufferMemory, nullptr);

@@ -1,7 +1,8 @@
 #include "Core/ECS/System.hpp"
 #include "Core/ECS/Scene.hpp"
+#include "Renderer/Vulkan/VulkanConfig.hpp"
 
-void System::Begin()
+void System::Begin(Scene* scene)
 {
 }
 
@@ -9,10 +10,11 @@ void System::Update(Scene* scene)
 {
 }
 
-void System::Draw(VulkanRenderer* renderer)
+void System::Render(VulkanRendererData* datarenderer, Scene* scene)
 {
 }
 
-void System::FixedUpdate()
+void System::FixedUpdate(Scene* scene)
 {
+
 }

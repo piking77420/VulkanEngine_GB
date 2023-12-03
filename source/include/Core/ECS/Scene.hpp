@@ -2,8 +2,8 @@
 #include "Core/Core.h"
 #include "Component.hpp"
 #include "System.hpp"
+#include "Renderer/Vulkan/VulkanConfig.hpp"
 #include "Physics/Transform.hpp"
-
 
 class Engine;
 
@@ -18,22 +18,22 @@ public :
 		
 	}
 
-	Entity& CreateEntity()
+	Entity* CreateEntity()
 	{
-		Entity ent = Entity(entity.size());
-		entity.emplace_back(ent);
+		Entity* ent = new Entity(entities.size());
+		entities.emplace_back(ent);
 		AddComponent<Transform>(ent);
 		return ent;
 	}
 
 	template<class T>
-	inline static bool HasComponent(Entity entity)
+	inline static bool HasComponent(Entity* entity)
 	{
-		return !(entity.ComponentId.at(T::ID) ? ComponentNull : 0);
+		return !(entity->ComponentId.at(T::ID) ? ComponentNull : 0);
 	}
 
 	template<class T>
-	inline T* AddComponent(Entity& entity)
+	inline T* AddComponent(Entity* entity)
 	{
 
 		static_assert(std::is_base_of<Component, T>::value, "T is not a subclass of Component");
@@ -42,18 +42,18 @@ public :
 			return nullptr;
 
 		Component* ptr = nullptr;
-		AddComponentInternal(entity, T::ID, &ptr);
+		AddComponentInternal(*entity, T::ID, &ptr);
 
 		return reinterpret_cast<T*>(ptr);
 	}
 
 	template<class T>
-	inline T* GetComponent(const Entity& entity)
+	inline T* GetComponent(Entity& entity)
 	{
 		static_assert(std::is_base_of<Component, T>::value, "T is not a subclass of Component");
 
 
-		if (!HasComponent<T>(entity))
+		if (!HasComponent<T>(&entity))
 			return nullptr;
 		
 		return reinterpret_cast<T*>(&componentData.at(T::ID).at(entity.ComponentId[T::ID]));
@@ -74,21 +74,23 @@ public :
 		if (!HasComponent<T>(entity))
 			return nullptr;
 
+
+
 	}
 
 	Entity* GetEntitiesById(const EntityID& entityId)
 	{
-		for (Entity& ent : entity)
+		for (Entity* ent : entities)
 		{
-			if(ent.Id == entityId)
+			if(*ent == entityId)
 			{
-				return &ent;
+				return ent;
 			}
 		}
 		return nullptr;
 	}
 
-	void RemoveEntiti(Entity& entity)
+	void RemoveEntitie(Entity& entity)
 	{
 		for(int i = 0 ; i < ComponentRegister::GetSizeComponentType();i++) 
 		{
@@ -123,7 +125,7 @@ public :
 	{
 		for (System* sys : systems)
 		{
-			sys->Begin();
+			sys->Begin(this);
 		}
 	}
 
@@ -139,18 +141,25 @@ public :
 	{
 		for (System* sys : systems)
 		{
-			sys->FixedUpdate();
+			sys->FixedUpdate(this);
 		}
 	}
 
-	
+	void Render(VulkanRendererData* datarenderer)
+	{
+		for (System* sys : systems)
+		{
+			sys->Render(datarenderer,this);
+		}
+	}
+
 
 
 private : 
 
 	std::vector<ComponentData> componentData;
 
-	std::vector<Entity> entity;
+	std::vector<Entity*> entities;
 
 	std::vector<System*> systems;
 
