@@ -108,7 +108,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpplatest</LanguageStandard>
-      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\source\include\External;$(VULKAN_SDK)\Include;$(SolutionDir)source\include\;$(SolutionDir)\source\include\Core\Math</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir);$(SolutionDir)\source\include\External;$(VULKAN_SDK)\Include;$(SolutionDir)source\include\;$(SolutionDir)\source\include\Core\Math;$(SolutionDir)\source\include\External\Imgui</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
@@ -138,6 +138,12 @@
   <ItemGroup>
     <ClCompile Include="source\include\Renderer\Vulkan\VulkanLoadImage.cpp" />
     <ClCompile Include="source\include\Resource\Texture.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui_demo.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui_impl_vulkan.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui_tables.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui_widgets.cpp" />
     <ClCompile Include="source\src\Resource\ResourceManager.cpp" />
     <ClCompile Include="source\src\Physics\GraphScene.cpp" />
     <ClCompile Include="source\include\Core\ECS\ComponentPtr.hpp" />
@@ -179,6 +185,13 @@
     <ClCompile Include="source\src\Core\ECS\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\External\Imgui\imconfig.h" />
+    <ClInclude Include="source\include\External\Imgui\imgui.h" />
+    <ClInclude Include="source\include\External\Imgui\imgui_impl_vulkan.h" />
+    <ClInclude Include="source\include\External\Imgui\imgui_internal.h" />
+    <ClInclude Include="source\include\External\Imgui\imstb_rectpack.h" />
+    <ClInclude Include="source\include\External\Imgui\imstb_textedit.h" />
+    <ClInclude Include="source\include\External\Imgui\imstb_truetype.h" />
     <ClInclude Include="source\include\External\stb_image.h" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanLoadImage.hpp" />
     <ClInclude Include="source\include\Resource\IResource.hpp" />
