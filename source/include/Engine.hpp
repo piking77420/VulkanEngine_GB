@@ -6,6 +6,7 @@
 #include "Physics/GraphScene.h"
 
 #include "Physics/Test.hpp"
+#include "Resource/ResourceManager.hpp"
 
 class Engine
 {
@@ -25,19 +26,12 @@ public:
 	}
  
 
-	Engine()
-	{
-		InitWindow();
-		m_VkRenderer.GetWindow(m_Window);
-		m_VkRenderer.InitVulkan();
-		scene.CreateEntity();
-		scene.AddSystem<GraphScene>();
-		scene.Begin();
- 	}
+	Engine();
+	
 
 	~Engine()
 	{
-		
+		m_ressourceManager.DestroyAllResource(m_VkRenderer);
 		m_VkRenderer.CleanUpVulkan();
 		glfwDestroyWindow(m_Window);
 		glfwTerminate();
@@ -52,6 +46,7 @@ private:
 	GLFWwindow* m_Window = nullptr;	
 	VulkanRenderer m_VkRenderer;
 	Scene scene;
+	ResourceManager m_ressourceManager;
 
 	void InitWindow()
 	{

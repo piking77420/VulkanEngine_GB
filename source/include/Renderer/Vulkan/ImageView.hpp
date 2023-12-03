@@ -3,6 +3,10 @@
 
 namespace VkUtils 
 {
-	void CreateImageViews(std::vector<VkImage>& _swapChainImages, VkFormat& _swapChainImageFormat, std::vector<VkImageView>& _swapChainImageViews, VkDevice& _device);
+	void CreateImageViews(VulkanRendererData& vulkanRendererData,std::vector<VkImage>& _swapChainImages, VkFormat& _swapChainImageFormat, std::vector<VkImageView>& _swapChainImageViews, VkDevice& _device);
+
+
+	VkImageView CreateImageView(VulkanRendererData& vulkanRendererData, VkImage image, VkFormat format);
+ 
 
 }

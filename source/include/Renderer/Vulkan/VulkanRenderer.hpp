@@ -60,7 +60,7 @@ public:
 
 		CleanupSwapChain();
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
-		VkUtils::CreateImageViews(swapChainImages, swapChainImageFormat, swapChainImageViews, device);
+		VkUtils::CreateImageViews(*this,swapChainImages, swapChainImageFormat, swapChainImageViews, device);
 		VkUtils::CreateFramebuffers(*this);
 
 	}
@@ -74,7 +74,7 @@ public:
 		VkInit::PickPhysicalDevice(instance, physicalDevice, surface);
 		Device::CreateLogicalDevice(device, physicalDevice, validationLayers, graphicsQueue, presentQueue, surface, deviceExtensions);
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
-		VkUtils::CreateImageViews(swapChainImages, swapChainImageFormat, swapChainImageViews, device);
+		VkUtils::CreateImageViews(*this,swapChainImages, swapChainImageFormat, swapChainImageViews, device);
 		CreateRenderPass();
 		CreateDescriptorSetLayout();
 		CreateGraphicsPipeline("shaders/vertex.spv", "shaders/fragment.spv");
@@ -234,6 +234,7 @@ private:
 
 
 	}
+
 
 
 	void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {

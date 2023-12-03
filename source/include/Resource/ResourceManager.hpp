@@ -2,20 +2,31 @@
 #include "Core/Core.h"
 #include "IResource.hpp"
 
+class VulkanRendererData;
+
 template<class T>
 concept IResourceConcept = std::is_base_of<IResource, T>::value;
 
-using IResourcePtr = std::unique_ptr<IResource>;
+using IResourcePtr = IResource*;
 using ResourceTypeMap = std::map<std::string, IResourcePtr>;
 
 
+class ResourceManager;
 static inline uint32_t RegisterResource();
 
 
 template<class T>
 class IRegisterResource : IResource
 {
+public:
+
+
+	void Destroy(VulkanRendererData& data) override
+	{
+	}
+protected :
 	static inline uint32_t ID = RegisterResource();
+	friend ResourceManager;
 };
 
 #define ISIDVALID(ID,ResourceMap) assert(ID <= ResourceMap.size()); \
@@ -45,13 +56,15 @@ public:
 	}
 
 	template<class T>
-	void Create(const std::string& name)
+	void Create(const std::string& path)
 	{
-		static_assert(std::is_base_of<IResource, T>," is not a IRessource");
+		//static_assert(std::is_base_of<IRegisterResource, T>," is not a IRessource");
 
-		IResourcePtr newResource = std::make_unique<IResourcePtr>(new T());
+		IResource* newResource = new T();
+		newResource->LoadResource(path,*m_VulkanRender);
 
-		m_ResourceMap.at(T::ID).insert({ name ,newResource });
+
+		m_ResourceMap.at(T::ID).insert({ path ,newResource });
 	}
 
 	template<class T>
@@ -70,9 +83,21 @@ public:
 		return true;
 	}
 
+	void DestroyAllResource(VulkanRendererData& _VulkanRendererData);
+
+
+	void GetVulkanRenderer(VulkanRendererData& _vulkanRendererData)
+	{
+		m_VulkanRender = &_vulkanRendererData;
+	}
+
+
+	ResourceManager();
 
 private:
 	std::map<uint32_t, ResourceTypeMap> m_ResourceMap;
+	VulkanRendererData* m_VulkanRender;
+
 };
 
 static inline uint32_t RegisterResource()

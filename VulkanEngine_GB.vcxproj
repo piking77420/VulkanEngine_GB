@@ -136,6 +136,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\include\Renderer\Vulkan\VulkanLoadImage.cpp" />
+    <ClCompile Include="source\include\Resource\Texture.cpp" />
     <ClCompile Include="source\src\Resource\ResourceManager.cpp" />
     <ClCompile Include="source\src\Physics\GraphScene.cpp" />
     <ClCompile Include="source\include\Core\ECS\ComponentPtr.hpp" />
@@ -177,6 +179,8 @@
     <ClCompile Include="source\src\Core\ECS\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\External\stb_image.h" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VulkanLoadImage.hpp" />
     <ClInclude Include="source\include\Resource\IResource.hpp" />
     <ClInclude Include="source\include\Resource\ResourceManager.hpp" />
     <ClInclude Include="source\include\Physics\GraphScene.h" />
@@ -211,6 +215,7 @@
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanHeader.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanInstance.hpp" />
     <ClInclude Include="source\include\Core\ECS\System.hpp" />
+    <ClInclude Include="source\include\Resource\Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="source\src\External\Lib\glfw3.lib" />
