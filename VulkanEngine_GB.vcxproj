@@ -136,11 +136,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\include\Renderer\Vulkan\VulkanLoadImage.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VulkanLoadImage.cpp" />
     <ClCompile Include="source\include\Resource\Texture.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_demo.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_draw.cpp" />
+    <ClCompile Include="source\src\External\Imgui\imgui_impl_glfw.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_impl_vulkan.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_tables.cpp" />
     <ClCompile Include="source\src\External\Imgui\imgui_widgets.cpp" />
@@ -187,6 +188,7 @@
   <ItemGroup>
     <ClInclude Include="source\include\External\Imgui\imconfig.h" />
     <ClInclude Include="source\include\External\Imgui\imgui.h" />
+    <ClInclude Include="source\include\External\Imgui\imgui_impl_glfw.h" />
     <ClInclude Include="source\include\External\Imgui\imgui_impl_vulkan.h" />
     <ClInclude Include="source\include\External\Imgui\imgui_internal.h" />
     <ClInclude Include="source\include\External\Imgui\imstb_rectpack.h" />

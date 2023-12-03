@@ -1,8 +1,8 @@
-#include "VulkanLoadImage.hpp"
+#include "Renderer/Vulkan/VulkanLoadImage.hpp"
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
-#include "Buffer.hpp"
-#include "ImageView.hpp"
+#include "Renderer/Vulkan/Buffer.hpp"
+#include "Renderer/Vulkan/ImageView.hpp"
 
 void VkClass::VkTexture::LoadImage(const std::string& path, VulkanRendererData& vulkanRendererData)
 {

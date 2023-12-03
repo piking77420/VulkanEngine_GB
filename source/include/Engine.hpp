@@ -41,8 +41,8 @@ public:
 
 private:
 	
-	const std::uint32_t m_Widht{ 800 };
-	const std::uint32_t m_Height{ 600 };
+	const std::uint32_t m_Widht{ 1920 };
+	const std::uint32_t m_Height{ 1080 };
 	GLFWwindow* m_Window = nullptr;	
 	VulkanRenderer m_VkRenderer;
 	Scene scene;

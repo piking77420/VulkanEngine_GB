@@ -2,6 +2,10 @@
 #define GLFW_INCLUDE_VULKAN
 #include <Core/Core.h>
 #include "Renderer/Vulkan/VulkanHeader.hpp"
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_vulkan.h"
+#include "Resource/ResourceManager.hpp"
 
 #ifdef NDEBUG
 const static inline bool enableValidationLayers = false;
@@ -23,6 +27,7 @@ VarType& Set##FuncAlias() \
 class Scene;
 
 
+#define IMGUI_EXTRA_TEXTURE 2 
 
 
 class VulkanRenderer : public VulkanRendererData
@@ -38,10 +43,8 @@ public:
 
 	}
 
-	void Draw()
-	{
-		DrawFrame();
-	}
+	void Draw();
+	
 
 	void RendererWait()
 	{
@@ -67,19 +70,24 @@ public:
 
 	void InitVulkan()
 	{
-
 		VulkanInstance::CreateInstance(&instance, validationLayers, enableValidationLayers);
 		VkInit::SetupDebugMessenger(instance, &debugMessenger);
 		VkInit::CreateSurface(&instance, window, &surface);
 		VkInit::PickPhysicalDevice(instance, physicalDevice, surface);
 		Device::CreateLogicalDevice(device, physicalDevice, validationLayers, graphicsQueue, presentQueue, surface, deviceExtensions);
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
-		VkUtils::CreateImageViews(*this,swapChainImages, swapChainImageFormat, swapChainImageViews, device);
+		VkUtils::CreateImageViews(*this, swapChainImages, swapChainImageFormat, swapChainImageViews, device);
 		CreateRenderPass();
 		CreateDescriptorSetLayout();
 		CreateGraphicsPipeline("shaders/vertex.spv", "shaders/fragment.spv");
 		VkUtils::CreateFramebuffers(*this);
 		CreateCommandPool();
+
+
+	}
+	void InitRendering()
+	{
+
 		VkUtils::CreateVertexBuffer(*this,vertices);
 		VkUtils::CreateIndexBuffer(*this, indices);
 		CreateUniformBuffers();
@@ -87,10 +95,23 @@ public:
 		CreateDescriptorSets();
 		CreateCommandBuffer();
 		CreateSyncObjects();
+
+		InitImgui();
+
+	}
+	void DestroyImgui()
+	{
+		ImGui_ImplVulkan_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
+		ImGui::DestroyContext();
 	}
 
 	void CleanUpVulkan()
 	{
+
+		DestroyImgui();
+
+
 		CleanupSwapChain();
 
 
@@ -139,14 +160,20 @@ public:
 	bool framebufferResized = false;
 
 
+	void InitImgui();
+
+	void GetRessourceManager(ResourceManager* _ressourceManager);
 
 private: 
 
+	ResourceManager* m_ressourceManager;
+
+
 	std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f,0.0f}, {1.0f, 0.0f, 0.0f}},
-		{{0.5f, -0.5f,0.0f}, {0.0f, 1.0f, 0.0f}},
-		{{0.5f, 0.5f,0.0f}, {0.0f, 0.0f, 1.0f}},
-		{{-0.5f, 0.5f,0.0f}, {1.0f, 1.0f, 1.0f}}
+		{{-0.5f, -0.5f,0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
+		{{0.5f, -0.5f,0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
+		{{0.5f, 0.5f,0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
+		{{-0.5f, 0.5f,0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
 	};
 
 	const std::vector<const char*> validationLayers = {
@@ -162,6 +189,8 @@ private:
 	};
 
 	void CreateGraphicsPipeline(std::string vertexShaderPath, std::string fragmenShaderPath);
+	
+
 	
 
 
@@ -241,6 +270,7 @@ private:
 
 		VkCommandBufferBeginInfo beginInfo{};
 		beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+		beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
 
 		if (vkBeginCommandBuffer(commandBuffer, &beginInfo) != VK_SUCCESS) {
 			throw std::runtime_error("failed to begin recording command buffer!");
@@ -294,6 +324,32 @@ private:
 		vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
 
+		// Start the Dear ImGui frame
+		ImGui_ImplVulkan_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+		static bool show_demo_window = true;
+
+		if (show_demo_window)
+			ImGui::ShowDemoWindow(&show_demo_window);
+
+		ImGui::Begin("sqdsqdsqdsq");
+		ImGui::End();
+
+		// Rendering
+		ImGui::Render();
+		ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer, 0);
+		
+
+		// Update and Render additional Platform Windows
+		if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+		{
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+		}
+
+
 
 		// End Draw
 		vkCmdEndRenderPass(commandBuffer);
@@ -341,13 +397,17 @@ private:
 			throw std::runtime_error("failed to acquire swap chain image!");
 		}
 
+
 		UpdateUniformBuffer(currentFrame);
+		vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
 
 		vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
-		vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
-		RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
 
+
+
+
+		RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
 		VkSubmitInfo submitInfo{};
 		submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
@@ -382,8 +442,12 @@ private:
 
 		result = vkQueuePresentKHR(presentQueue, &presentInfo);
 
-		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized) {
+		if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized)
+		{
 			framebufferResized = false;
+			ImGui_ImplVulkan_SetMinImageCount(2);
+
+
 			RecreateSwapChain();
 		}
 		else if (result != VK_SUCCESS) {
@@ -401,25 +465,27 @@ private:
 	{
 		VkDescriptorSetLayoutBinding uboLayoutBinding{};
 		uboLayoutBinding.binding = 0;
-		uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
 		uboLayoutBinding.descriptorCount = 1;
+		uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		uboLayoutBinding.pImmutableSamplers = nullptr;
 		uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-		uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
 
+		VkDescriptorSetLayoutBinding samplerLayoutBinding{};
+		samplerLayoutBinding.binding = 1;
+		samplerLayoutBinding.descriptorCount = 1;
+		samplerLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		samplerLayoutBinding.pImmutableSamplers = nullptr;
+		samplerLayoutBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
+		std::array<VkDescriptorSetLayoutBinding, 2> bindings = { uboLayoutBinding, samplerLayoutBinding };
 		VkDescriptorSetLayoutCreateInfo layoutInfo{};
 		layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-		layoutInfo.bindingCount = 1;
-		layoutInfo.pBindings = &uboLayoutBinding;
+		layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+		layoutInfo.pBindings = bindings.data();
 
 		if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create descriptor set layout!");
 		}
-
-		VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
-		pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-		pipelineLayoutInfo.setLayoutCount = 1;
-		pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 
 	}
 
@@ -457,16 +523,18 @@ private:
 
 	void CreateDescriptorPool()
 	{
-		VkDescriptorPoolSize poolSize{};
-		poolSize.type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-		poolSize.descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+		std::array<VkDescriptorPoolSize, 2> poolSizes{};
+		poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+		poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT) * IMGUI_EXTRA_TEXTURE;
 
 		VkDescriptorPoolCreateInfo poolInfo{};
 		poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-		poolInfo.poolSizeCount = 1;
-		poolInfo.pPoolSizes = &poolSize;
-
-		poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+		poolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+		poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
+		poolInfo.pPoolSizes = poolSizes.data();
+		poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT) * IMGUI_EXTRA_TEXTURE;
 
 		if (vkCreateDescriptorPool(device, &poolInfo, nullptr, &descriptorPool) != VK_SUCCESS) {
 			throw std::runtime_error("failed to create descriptor pool!");
@@ -475,38 +543,8 @@ private:
 	}
 
 
-	void CreateDescriptorSets() 
-	{
-		std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
-		VkDescriptorSetAllocateInfo allocInfo{};
-		allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-		allocInfo.descriptorPool = descriptorPool;
-		allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-		allocInfo.pSetLayouts = layouts.data();
-
-		descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-		if (vkAllocateDescriptorSets(device, &allocInfo, descriptorSets.data()) != VK_SUCCESS) {
-			throw std::runtime_error("failed to allocate descriptor sets!");
-		}
-
-		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-			VkDescriptorBufferInfo bufferInfo{};
-			bufferInfo.buffer = uniformBuffers[i];
-			bufferInfo.offset = 0;
-			bufferInfo.range = sizeof(UniformBufferObject);
-
-			VkWriteDescriptorSet descriptorWrite{};
-			descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-			descriptorWrite.dstSet = descriptorSets[i];
-			descriptorWrite.dstBinding = 0;
-			descriptorWrite.dstArrayElement = 0;
-			descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-			descriptorWrite.descriptorCount = 1;
-			descriptorWrite.pBufferInfo = &bufferInfo;
-
-			vkUpdateDescriptorSets(device, 1, &descriptorWrite, 0, nullptr);
-		}
-	}
+	void CreateDescriptorSets();
+	
 
 
 };

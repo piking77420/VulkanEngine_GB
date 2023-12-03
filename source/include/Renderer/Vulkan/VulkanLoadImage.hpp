@@ -26,6 +26,11 @@ namespace VkClass
       
 
 
+        VkImage textureImage;
+        VkDeviceMemory textureImageMemory;
+        VkImageView textureImageView;
+        VkSampler textureSampler;
+
     protected:
         void CreateVKImage(VulkanRendererData& vulkanRendererData, int32_t width, uint32_t height,
             VkFormat format, VkImageTiling tiling, 
@@ -37,11 +42,6 @@ namespace VkClass
         void CreateTextureSampler(VulkanRendererData& vulkanRendererData);
        
 
-
-        VkImage textureImage;
-        VkDeviceMemory textureImageMemory;
-        VkImageView textureImageView;
-        VkSampler textureSampler;
 
     };
 

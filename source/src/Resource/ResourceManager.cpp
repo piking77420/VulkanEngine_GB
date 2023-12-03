@@ -17,6 +17,6 @@ ResourceManager::ResourceManager()
 {
 	for (size_t i = 0; i < GlobalMapResourceID; i++)
 	{
-		m_ResourceMap.insert({ i,std::map<std::string,IResourcePtr>() });
+		m_ResourceMap.insert({ i,std::map<std::string,IResource*>() });
 	}
 }

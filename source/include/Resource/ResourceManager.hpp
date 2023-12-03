@@ -7,8 +7,7 @@ class VulkanRendererData;
 template<class T>
 concept IResourceConcept = std::is_base_of<IResource, T>::value;
 
-using IResourcePtr = IResource*;
-using ResourceTypeMap = std::map<std::string, IResourcePtr>;
+using ResourceTypeMap = std::map<std::string, IResource*>;
 
 
 class ResourceManager;
@@ -16,14 +15,14 @@ static inline uint32_t RegisterResource();
 
 
 template<class T>
-class IRegisterResource : IResource
+class IRegisterResource : public IResource
 {
 public:
 
+	virtual void LoadResource(const std::string& path, VulkanRendererData& _vulkanRendererData) = 0 ;
 
-	void Destroy(VulkanRendererData& data) override
-	{
-	}
+	virtual void Destroy(VulkanRendererData& data) override = 0;
+	
 protected :
 	static inline uint32_t ID = RegisterResource();
 	friend ResourceManager;
@@ -43,9 +42,9 @@ public:
 	template<class T>
 	T* GetResource(const std::string& name)
 	{
-		ISIDVALID(T::ID, m_ResourceMap);
+		//ISIDVALID(T::ID, m_ResourceMap);
 
-		m_ResourceMap.at(T::ID).at(name);
+		return dynamic_cast<T*>(m_ResourceMap.at(T::ID).at(name));
 	}
 	template<class T>
 	const T* GetResource(const std::string& name) const 
