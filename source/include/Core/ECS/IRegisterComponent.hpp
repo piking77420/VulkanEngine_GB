@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.hpp"
 
+class Scene;
 
 template<class T>
 static inline void CreateComponent(std::vector<uint8_t>& compdata,Entity& entity, Component** ptr)
@@ -21,17 +22,19 @@ static inline void FreeComponent(Component* ptr)
 }
 
 
+
 template<class T>
 class IRegisterComponent : public Component
 {
 public:
 
-	static uint32_t ID;
+	
 
+	static const uint32_t ID;
 private:
-
+	friend Scene;
 };
 
 
 template<class T>
-uint32_t IRegisterComponent<T>::ID = ComponentRegister::RegisterComponent(CreateComponent<T>, FreeComponent<T>, sizeof(T));
+const uint32_t IRegisterComponent<T>::ID (ComponentRegister::RegisterComponent<T>(CreateComponent<T>, FreeComponent<T>, sizeof(T)));

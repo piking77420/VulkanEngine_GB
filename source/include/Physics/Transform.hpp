@@ -1,3 +1,4 @@
+#pragma once
 #include "Core/ECS/IRegisterComponent.hpp"
 
 
@@ -10,12 +11,15 @@ public:
 	Quaternion rotation;
 	Vector3 scale;
 
-	Transform(){}
-	~Transform(){}
-
 	Matrix4X4 Local;
 	Matrix4X4 Global;
+
+	Transform() {}
+	~Transform() {}
+
 
 private:
 	
 };
+
+

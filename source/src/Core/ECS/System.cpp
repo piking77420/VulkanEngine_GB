@@ -9,6 +9,10 @@ void System::Update(Scene* scene)
 {
 }
 
+void System::Draw(VulkanRenderer* renderer)
+{
+}
+
 void System::FixedUpdate()
 {
 }

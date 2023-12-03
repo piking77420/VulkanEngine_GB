@@ -4,15 +4,14 @@
 #include "System.hpp"
 #include "Physics/Transform.hpp"
 
-using ComponentData = std::vector<uint8_t>;
 
+class Engine;
 
 class Scene
 {
 public : 
 
 	Scene();
-	
 	
 	~Scene()
 	{
@@ -110,8 +109,6 @@ public :
 
 		
 
-
-
 		return reinterpret_cast<std::vector<T>*>(&componentData[T::ID]);
 	}
 
@@ -146,10 +143,10 @@ public :
 		}
 	}
 
+	
+
 
 private : 
-
-
 
 	std::vector<ComponentData> componentData;
 

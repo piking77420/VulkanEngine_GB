@@ -1,10 +1,6 @@
 #include "Core/ECS/Scene.hpp"
+#include "Engine.hpp"
 
-Scene::Scene()
-{
-	componentData.resize(ComponentRegister::GetSizeComponentType());
-
-}
 
 void Scene::AddComponentInternal(Entity& entity, uint32_t ComponentID,Component** ptr)
 {
@@ -59,6 +55,12 @@ void Scene::RemoveComponentInternal(Entity& entity, uint32_t ComponentID)
 	SetComponentIdToEntity(entity, ComponentID, ComponentNull);
 
 }
+
+Scene::Scene()
+{
+	componentData.resize(ComponentRegister::GetSizeComponentType());
+}
+
 
 void Scene::SetComponentIdToEntity(Entity& entity, uint32_t ComponentID,uint32_t ComponentInMemoryindex)
 {

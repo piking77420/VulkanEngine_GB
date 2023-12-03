@@ -5,6 +5,7 @@
 #include "Core/ECS/Scene.hpp"
 #include "Physics/GraphScene.h"
 
+#include "Physics/Test.hpp"
 
 class Engine
 {
@@ -20,6 +21,7 @@ public:
 			m_VkRenderer.Draw();
 		}
 		m_VkRenderer.RendererWait();
+		
 	}
  
 
@@ -31,7 +33,7 @@ public:
 		scene.CreateEntity();
 		scene.AddSystem<GraphScene>();
 		scene.Begin();
-	}
+ 	}
 
 	~Engine()
 	{

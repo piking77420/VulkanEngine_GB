@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Resource\ResourceManager.cpp" />
     <ClCompile Include="source\src\Physics\GraphScene.cpp" />
     <ClCompile Include="source\include\Core\ECS\ComponentPtr.hpp" />
     <ClCompile Include="source\include\Core\ECS\IRegisterComponent.hpp" />
@@ -176,6 +177,8 @@
     <ClCompile Include="source\src\Core\ECS\System.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\Resource\IResource.hpp" />
+    <ClInclude Include="source\include\Resource\ResourceManager.hpp" />
     <ClInclude Include="source\include\Physics\GraphScene.h" />
     <ClInclude Include="source\include\Core\ECS\Component.hpp" />
     <ClInclude Include="source\include\Core\ECS\Scene.hpp" />
@@ -195,6 +198,7 @@
     <ClInclude Include="source\include\Core\Core.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3.h" />
     <ClInclude Include="source\include\External\GLFW\glfw3native.h" />
+    <ClInclude Include="source\include\Physics\Test.hpp" />
     <ClInclude Include="source\include\Physics\Transform.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Buffer.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Device.hpp" />

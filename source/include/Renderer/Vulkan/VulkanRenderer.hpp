@@ -20,7 +20,7 @@ VarType& Set##FuncAlias() \
         return Varname; \
     }
 
-
+class Scene;
 
 
 
@@ -235,6 +235,7 @@ private:
 
 	}
 
+
 	void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
 
 		VkCommandBufferBeginInfo beginInfo{};
@@ -255,9 +256,6 @@ private:
 		renderPassInfo.clearValueCount = 1;
 		renderPassInfo.pClearValues = &clearColor;
 
-		vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 
 		VkViewport viewport{};
 		viewport.x = 0.0f;
@@ -273,6 +271,17 @@ private:
 		scissor.extent = swapChainExtent;
 		vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
+
+		vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+		vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
+
+	
+
+
+		// bind Draw Call
+
+
 		VkBuffer vertexBuffers[] = { vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
 		vkCmdBindVertexBuffers(commandBuffer, 0, 1, vertexBuffers, offsets);
@@ -283,6 +292,9 @@ private:
 
 		vkCmdDrawIndexed(commandBuffer, static_cast<uint32_t>(indices.size()), 1, 0, 0, 0);
 
+
+
+		// End Draw
 		vkCmdEndRenderPass(commandBuffer);
 
 		if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
