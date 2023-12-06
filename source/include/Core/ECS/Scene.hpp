@@ -69,6 +69,18 @@ public :
 	}
 
 	template<class T>
+	inline T* GetComponent(EntityID& entityID)
+	{
+		Entity& entity = *GetEntitiesById(entityID);
+
+		if (!HasComponent<T>(&entity))
+			return nullptr;
+
+
+		return reinterpret_cast<T*>(&componentData.at(T::ID).at(entity.ComponentId[T::ID]));
+	}
+
+	template<class T>
 	void RemoveComponent(Entity& entity)
 	{
 		if (!HasComponent<T>(entity))
@@ -144,6 +156,15 @@ public :
 			sys->FixedUpdate(this);
 		}
 	}
+
+	void RenderUpdate(VulkanRendererData* datarenderer)
+	{
+		for (System* sys : systems)
+		{
+			sys->UpdateRender(datarenderer, this);
+		}
+	}
+
 
 	void Render(VulkanRendererData* datarenderer)
 	{

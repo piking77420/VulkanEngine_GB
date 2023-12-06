@@ -6,12 +6,13 @@
 struct Vertex
 {
 	Vector3 pos;
+    Vector3 Normal;
 	Vector3 color;
 	Vector2 texCoord;
 
     static VkVertexInputBindingDescription GetBindingDescription();
 
-	static std::array<VkVertexInputAttributeDescription, 3> GetAttributeDescriptions();
+	static std::array<VkVertexInputAttributeDescription, 4> GetAttributeDescriptions();
 
 	bool operator==(const Vertex& other) const {
 		return pos == other.pos && color == other.color && texCoord == other.texCoord;

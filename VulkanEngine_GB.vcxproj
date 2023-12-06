@@ -136,7 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="source\include\Renderer\Vulkan\VkFormat.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VkFormat.cpp" />
     <ClCompile Include="source\src\Renderer\System\RendereMesh.cpp" />
     <ClCompile Include="source\src\Renderer\MeshRenderer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VkImage.cpp" />

@@ -8,10 +8,18 @@ void System::Begin(Scene* scene)
 
 void System::Update(Scene* scene)
 {
+
+}
+
+
+void System::UpdateRender(VulkanRendererData* datarenderer, Scene* scene)
+{
+
 }
 
 void System::Render(VulkanRendererData* datarenderer, Scene* scene)
 {
+
 }
 
 void System::FixedUpdate(Scene* scene)

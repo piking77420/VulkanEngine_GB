@@ -8,6 +8,9 @@ class RendereMesh : public System
 
 	void Update(Scene* scene) override;
 
+	void UpdateRender(VulkanRendererData* datarenderer, Scene* scene) override;
+
+
 	void Render(VulkanRendererData* datarenderer, Scene* scene) override;
 
 	void FixedUpdate(Scene* scene) override;
