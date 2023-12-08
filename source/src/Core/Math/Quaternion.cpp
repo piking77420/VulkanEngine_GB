@@ -116,7 +116,7 @@ Vector3 Quaternion::ToEulerAngle() const
 		return NormalizeAngles(v);
 
 
-	}
+}
 
 
 

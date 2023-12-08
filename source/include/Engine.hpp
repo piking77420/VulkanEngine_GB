@@ -21,7 +21,7 @@ public:
 			glfwPollEvents();
 			scene.FixedUpdate();
 			scene.Update();
-			m_VkRenderer.Draw(&scene);
+			m_VkRenderer.Draw();
 		}
 		m_VkRenderer.RendererWait();
 		

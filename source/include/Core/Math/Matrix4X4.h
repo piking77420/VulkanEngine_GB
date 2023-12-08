@@ -42,7 +42,7 @@ public:
 		float zdiff = Near - Far;
 
 		float r00 = fFovRad / aspect;
-		float r11 = fFovRad;
+		float r11 = -fFovRad;
 
 		float r22 = (Far + Near) / zdiff;
 		float r32 = (2 * Far * Near) / zdiff;

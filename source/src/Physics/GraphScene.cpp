@@ -14,7 +14,8 @@ void GraphScene::Update(Scene* scene)
 
 	for (std::vector<Transform>::iterator it = data->begin(); it != data->end(); it++)
 	{
-		it->Local = Matrix4X4::TRS(it->pos, it->rotation, it->scale);
+		it->GetQuatrion() = Quaternion::FromEulerAngle(it->rotation);
+		it->Local = Matrix4X4::TRS(it->pos, it->GetQuatrion(), it->scale);
 		it->Global = it->Local;
 	}
 

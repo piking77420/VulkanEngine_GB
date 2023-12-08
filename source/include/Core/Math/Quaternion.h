@@ -166,7 +166,7 @@ public:
 	}
 
 	// https://forum.unity.com/threads/is-there-a-conversion-method-from-quaternion-to-euler.624007/
-	Vector3 inline ToEulerAngle() const;
+	Vector3  ToEulerAngle() const;
 	
 
 	[[nodiscard]]

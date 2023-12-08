@@ -3,14 +3,14 @@
 #include "Resource/Model.hpp"
 #include "Renderer/System/RendereMesh.hpp"
 #include "Renderer/MeshRenderer.h"
-
+#include "ViewPort/Hierachy.hpp"
 
 
 Engine::Engine()
 {
 	InitWindow();
 	m_VkRenderer.GetWindow(m_Window);
-
+	m_VkRenderer.GetScene(&scene);
 	m_VkRenderer.InitVulkan();
 
 	m_ressourceManager.GetVulkanRenderer(m_VkRenderer);
@@ -26,12 +26,18 @@ Engine::Engine()
 
 	Entity* ent =  scene.CreateEntity();
 	
+
+	Transform* transfrom = scene.GetComponent<Transform>(*scene.GetEntitiesById(0));
+
+
 	scene.AddComponent<MeshRenderer>(ent);
 	MeshRenderer* mesh  = scene.GetComponent<MeshRenderer>(*ent);
 	mesh->model = m_ressourceManager.GetResource<Model>("Model/viking_room.obj");
 
 	scene.AddSystem<GraphScene>();
 	scene.AddSystem<RendereMesh>();
+	scene.AddSystem<Hierachy>();
+
 	scene.Begin();
 
 }

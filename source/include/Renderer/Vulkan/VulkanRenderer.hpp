@@ -43,7 +43,7 @@ public:
 
 	}
 
-	void Draw(Scene* scene);
+	void Draw();
 	
 
 	void RendererWait()
@@ -64,10 +64,10 @@ public:
 		CleanupSwapChain();
 
 
-
-		CreateDepthResources();
+		// order is important
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
-		VkUtils::CreateImageViews(*this,swapChainImages, swapChainImageFormat, swapChainImageViews, device);
+		VkUtils::CreateImageViews(*this, swapChainImages, swapChainImageFormat, swapChainImageViews, device);
+		CreateDepthResources();
 		VkUtils::CreateFramebuffers(*this);
 
 	}
@@ -173,22 +173,17 @@ public:
 
 	void GetRessourceManager(ResourceManager* _ressourceManager);
 
+	void GetScene(Scene* _scene) 
+	{
+		Scene = _scene;
+	}
+
 private: 
 
 	ResourceManager* m_ressourceManager;
+	Scene* Scene;
 
-	/*
-	std::vector<Vertex> vertices = {
-		{{-0.5f, -0.5f,0.0f}, {1.0f, 0.0f, 0.0f}, {1.0f, 0.0f}},
-		{{0.5f, -0.5f,0.0f}, {0.0f, 1.0f, 0.0f}, {0.0f, 0.0f}},
-		{{0.5f, 0.5f,0.0f}, {0.0f, 0.0f, 1.0f}, {0.0f, 1.0f}},
-		{{-0.5f, 0.5f,0.0f}, {1.0f, 1.0f, 1.0f}, {1.0f, 1.0f}}
-	};
-
-	std::vector<uint16_t> indices = {
-	0, 1, 2, 2, 3, 0
-	};
-	*/
+	
 	const std::vector<const char*> validationLayers = {
 		"VK_LAYER_KHRONOS_validation"
 	};
@@ -307,7 +302,7 @@ private:
 
 
 
-	void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, Scene* scene);
+	void RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex);
 	
 
 	void CreateSyncObjects()
@@ -333,7 +328,7 @@ private:
 
 	}
 
-	void DrawFrame(Scene* scene);
+	void DrawFrame();
 	
 
 
@@ -384,21 +379,8 @@ private:
 		}
 	}
 
-	void UpdateUniformBuffer(uint32_t currentImage) 
-	{
-		static auto startTime = std::chrono::high_resolution_clock::now();
+	void UpdateUniformBuffer(uint32_t currentImage);
 
-		auto currentTime = std::chrono::high_resolution_clock::now();
-		float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
-
-		UniformBufferObject ubo;
-		ubo.model = Matrix4X4::TRS(Vector3(0,0,0),Quaternion::FromEulerAngle(Vector3(20,0,20) + time) ,Vector3::One());
-		ubo.view = Matrix4X4::LookAt(Vector3(2.0f, 2.0f, 2.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
-		ubo.proj = Matrix4X4::PerspectiveMatrix(Math::Deg2Rad * 45.0f, swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
-
-		memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
-	}
 
 	void CreateDescriptorPool()
 	{

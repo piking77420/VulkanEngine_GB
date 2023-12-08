@@ -2,11 +2,34 @@
 #include "Resource/Texture.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Core/ECS/Scene.hpp"
+#include "Renderer/Camera/Camera.hpp"
 
 
 void VulkanRenderer::GetRessourceManager(ResourceManager* _ressourceManager)
 {
 	m_ressourceManager = _ressourceManager;
+}
+
+void VulkanRenderer::UpdateUniformBuffer(uint32_t currentImage)
+{
+	static auto startTime = std::chrono::high_resolution_clock::now();
+
+	auto currentTime = std::chrono::high_resolution_clock::now();
+	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
+
+	Transform* transfrom = Scene->GetComponent<Transform>(*Scene->GetEntitiesById(0));
+
+
+
+	UniformBufferObject ubo;
+	ubo.model = transfrom->Global;
+	Camera* cam = Camera::SetMainCamera();
+	cam->UpdateMainCamera();
+
+	ubo.view = Matrix4X4::LookAt(cam->GetTramsform().pos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
+	ubo.proj = Matrix4X4::PerspectiveMatrix(Math::Deg2Rad * 45.0f, swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
+
+	memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
 }
 
 void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::string fragmenShaderPath)
@@ -145,7 +168,7 @@ void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::s
 
 }
 
-void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex, Scene* scene)
+void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex)
 {
 
 	VkCommandBufferBeginInfo beginInfo{};
@@ -206,22 +229,9 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-	static bool show_demo_window = true;
-
-	if (show_demo_window)
-		ImGui::ShowDemoWindow(&show_demo_window);
-
-	ImGui::Begin("Window");
-	if(ImGui::Button("FulleScreen"))
-	{
-		
-	}
-	ImGui::End();
 
 
-
-
-	scene->Render(this);
+	Scene->Render(this);
 
 
 	
@@ -251,9 +261,9 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 }
 
 
-void VulkanRenderer::Draw(Scene* scene)
+void VulkanRenderer::Draw()
 {
-	DrawFrame(scene);
+	DrawFrame();
 }
 
 static void check_vk_result(VkResult err)
@@ -312,7 +322,7 @@ void VulkanRenderer::InitImgui()
 
 }
 
-void VulkanRenderer::DrawFrame(Scene* scene)
+void VulkanRenderer::DrawFrame()
 {
 	vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
@@ -337,7 +347,7 @@ void VulkanRenderer::DrawFrame(Scene* scene)
 
 	vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
-	RecordCommandBuffer(commandBuffers[currentFrame], imageIndex, scene);
+	RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
 
 
 
@@ -378,10 +388,8 @@ void VulkanRenderer::DrawFrame(Scene* scene)
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized)
 	{
 		framebufferResized = false;
-		ImGui_ImplVulkan_SetMinImageCount(2);
-
-
 		RecreateSwapChain();
+		ImGui_ImplVulkan_SetMinImageCount(2);
 	}
 	else if (result != VK_SUCCESS) {
 		throw std::runtime_error("failed to present swap chain image!");
@@ -392,6 +400,11 @@ void VulkanRenderer::DrawFrame(Scene* scene)
 
 void VulkanRenderer::CleanupSwapChain()
 {
+	vkDestroyImageView(device, depthImageView, nullptr);
+	vkDestroyImage(device, depthImage, nullptr);
+	vkFreeMemory(device, depthImageMemory, nullptr);
+
+
 	for (auto framebuffer : swapChainFramebuffers) {
 		vkDestroyFramebuffer(device, framebuffer, nullptr);
 	}
