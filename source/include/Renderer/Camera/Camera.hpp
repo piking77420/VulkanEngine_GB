@@ -1,7 +1,10 @@
 #pragma once
 #include<Core/Core.h>
 #include "Physics/Transform.hpp"
-#include<GLFW/glfw3.h>
+#define GLFW_INCLUDE_VULKAN
+#include <GLFW/glfw3.h>
+#include "Renderer/Vulkan/VulkanRenderer.hpp"
+#include "Renderer/Vulkan/VulkanConfig.hpp"
 
 class Camera
 {

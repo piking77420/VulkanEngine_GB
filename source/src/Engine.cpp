@@ -12,7 +12,7 @@ Engine::Engine()
 	m_VkRenderer.GetWindow(m_Window);
 	m_VkRenderer.GetScene(&scene);
 	m_VkRenderer.InitVulkan();
-
+	imgui.Init();
 	
 
 	m_ressourceManager.GetVulkanRenderer(m_VkRenderer);

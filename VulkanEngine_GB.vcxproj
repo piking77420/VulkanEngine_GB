@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\src\Renderer\Camera\Camera.cpp" />
+    <ClCompile Include="source\src\Renderer\ImguiImplement\ImguiImplement.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanConfig.cpp" />
     <ClCompile Include="source\src\ViewPort\Hierachy.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VkFormat.cpp" />
@@ -195,6 +196,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\include\Renderer\Camera\Camera.hpp" />
+    <ClInclude Include="source\include\Renderer\ImguiImplement\ImguiImplement.hpp" />
     <ClInclude Include="source\include\ViewPort\Hierachy.hpp" />
     <ClInclude Include="source\include\Renderer\System\RendereMesh.hpp" />
     <ClInclude Include="source\include\Renderer\MeshRenderer.h" />

@@ -8,7 +8,7 @@
 #include "Physics/Test.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Renderer/Camera/Camera.hpp"
-
+#include "Renderer/ImguiImplement/ImguiImplement.hpp"
 class Engine
 {
 public:
@@ -23,7 +23,9 @@ public:
 			scene.FixedUpdate();
 			cam->UpdateMainCamera();
 			scene.Update();
+			imgui.NewFrame();
 			m_VkRenderer.Draw();
+			imgui.NewFrame();
 		}
 		m_VkRenderer.RendererWait();
 		
@@ -51,6 +53,7 @@ private:
 	VulkanRenderer m_VkRenderer;
 	Scene scene;
 	ResourceManager m_ressourceManager;
+	ImguiVulkan imgui;
 
 	void InitWindow()
 	{
@@ -59,12 +62,19 @@ private:
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
 		m_Window = glfwCreateWindow(m_Widht, m_Height, "Vulkan window", nullptr, nullptr);
-		// &m_VkRenderer is correct dont move it 
+
+		if (!m_Window) {
+		}
+
 		glfwSetWindowUserPointer(m_Window, &m_VkRenderer);
+
 		glfwSetFramebufferSizeCallback(m_Window, FramebufferResizeCallback);
 
 		glfwSetCursorPosCallback(m_Window, Camera::MouseCallback);
 
+		 glfwMakeContextCurrent(m_Window);
+
+		static GLFWwindow* currentContext = glfwGetCurrentContext();
 	}
 
 

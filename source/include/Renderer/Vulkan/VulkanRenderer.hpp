@@ -2,9 +2,7 @@
 #define GLFW_INCLUDE_VULKAN
 #include <Core/Core.h>
 #include "Renderer/Vulkan/VulkanHeader.hpp"
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_vulkan.h"
+
 #include "Resource/ResourceManager.hpp"
 
 #ifdef NDEBUG
@@ -34,12 +32,6 @@ class Transform;
 class VulkanRenderer : public VulkanRendererData
 {
 public:
-
-	
-
-	void createViewportImage();
-	void createViewportImageViews();
-
 
 
 	VulkanRenderer()
@@ -110,21 +102,11 @@ public:
 		CreateDescriptorSets();
 		CreateCommandBuffer();
 		CreateSyncObjects();
-
-		InitImgui();
-
-	}
-	void DestroyImgui()
-	{
-		ImGui_ImplVulkan_Shutdown();
-		ImGui_ImplGlfw_Shutdown();
-		ImGui::DestroyContext();
 	}
 
 	void CleanUpVulkan()
 	{
 
-		DestroyImgui();
 
 
 		CleanupSwapChain();
@@ -174,7 +156,7 @@ public:
 	bool framebufferResized = false;
 
 
-	void InitImgui();
+
 
 	void GetRessourceManager(ResourceManager* _ressourceManager);
 

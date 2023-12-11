@@ -12,7 +12,7 @@ struct UniformBufferObject {
 
 struct VulkanRendererData
 {
-	GLFWwindow* window = nullptr;
+	static GLFWwindow* window;
 
 	VkInstance instance = VK_NULL_HANDLE;
 	VkDebugUtilsMessengerEXT debugMessenger = VK_NULL_HANDLE;

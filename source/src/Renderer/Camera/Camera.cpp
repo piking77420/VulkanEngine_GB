@@ -1,9 +1,22 @@
 #include "Renderer/Camera/Camera.hpp"
-#include <Imgui/imgui.h>
+
 
 Camera* Camera::mainCamera = new Camera();
 
+bool IskeyPress(const int& GLFWInput)
+{
+	
+	static GLFWwindow* currentContext = VulkanRendererData::window;
 
+	if (!currentContext)
+		return false;
+
+	if (glfwGetKey(currentContext, GLFWInput) == GLFW_PRESS)
+	{
+		return true;
+	}
+	return false;
+}
 
 
 void Camera::UpdateMainCamera()
@@ -13,36 +26,36 @@ void Camera::UpdateMainCamera()
 	if (!cam)
 		return;
 
-	float deltatime = ImGui::GetIO().DeltaTime;
+	constexpr float deltatime = 0.003;
 
 	Vector3& vec = cam->transform.pos;
 
-
-	if(ImGui::IsKeyDown(ImGuiKey_A))
+	
+	if(IskeyPress(GLFW_KEY_A))
 	{
 		cam->transform.pos -= mainCamera->right * deltatime;
 	}
-	if (ImGui::IsKeyDown(ImGuiKey_D))
+	if (IskeyPress(GLFW_KEY_D))
 	{
 		cam->transform.pos += mainCamera->right * deltatime;
 	}
 
-	if (ImGui::IsKeyDown(ImGuiKey_W))
+	if (IskeyPress(GLFW_KEY_W))
 	{
 		cam->transform.pos += mainCamera->front * deltatime;
 	}
 
-	if (ImGui::IsKeyDown(ImGuiKey_S))
+	if (IskeyPress(GLFW_KEY_S))
 	{
 		cam->transform.pos -= mainCamera->front * deltatime;
 	}
 
-	if (ImGui::IsKeyDown(ImGuiKey_Space))
+	if (IskeyPress(GLFW_KEY_SPACE))
 	{
 		cam->transform.pos += mainCamera->up * deltatime;
 	}
 
-	if (ImGui::IsKeyDown(ImGuiKey_LeftCtrl))
+	if (IskeyPress(GLFW_KEY_LEFT_CONTROL))
 	{
 		cam->transform.pos -= mainCamera->up * deltatime;
 	}
