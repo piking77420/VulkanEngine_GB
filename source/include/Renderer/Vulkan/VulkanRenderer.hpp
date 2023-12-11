@@ -35,12 +35,15 @@ class VulkanRenderer : public VulkanRendererData
 {
 public:
 
+	
+
+	void createViewportImage();
+	void createViewportImageViews();
 
 
 
 	VulkanRenderer()
 	{
-		VulkanRendererData::BindedVulkanContext = this;
 	}
 	~VulkanRenderer()
 	{
@@ -49,6 +52,8 @@ public:
 
 	void Draw();
 	
+
+
 
 	void RendererWait()
 	{
@@ -123,10 +128,6 @@ public:
 
 
 		CleanupSwapChain();
-
-		vkDestroyImageView(device, depthImageView, nullptr);
-		vkDestroyImage(device, depthImage, nullptr);
-		vkFreeMemory(device, depthImageMemory, nullptr);
 
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
 			vkDestroyBuffer(device, uniformBuffers[i], nullptr);

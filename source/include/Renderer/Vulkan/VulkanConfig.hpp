@@ -68,6 +68,8 @@ struct VulkanRendererData
 
 
 
-	static VulkanRendererData* BindedVulkanContext;
+
+
+private:
 	 
 };
