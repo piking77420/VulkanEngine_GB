@@ -12,6 +12,7 @@ void Scene::AddComponentInternal(Entity& entity, uint32_t ComponentID,Component*
 
 	creatfunc(data,entity, ptr);
 	SetComponentIdToEntity(entity, ComponentID, index);
+	TriggerOnresizeDataEvent(ComponentID, &componentData[ComponentID]);
 }	
 
 void Scene::RemoveComponentInternal(Entity& entity, uint32_t ComponentID)
@@ -53,6 +54,7 @@ void Scene::RemoveComponentInternal(Entity& entity, uint32_t ComponentID)
 	dataArray.resize(lastIndex);
 
 	SetComponentIdToEntity(entity, ComponentID, ComponentNull);
+	TriggerOnresizeDataEvent(ComponentID, &componentData[ComponentID]);
 
 }
 

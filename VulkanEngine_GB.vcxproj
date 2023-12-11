@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\src\Renderer\Camera\Camera.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VulkanConfig.cpp" />
     <ClCompile Include="source\src\ViewPort\Hierachy.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VkFormat.cpp" />
     <ClCompile Include="source\src\Renderer\System\RendereMesh.cpp" />

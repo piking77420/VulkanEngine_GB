@@ -28,15 +28,19 @@ class Scene;
 
 
 #define IMGUI_EXTRA_TEXTURE 2 
+class Transform;
 
 
 class VulkanRenderer : public VulkanRendererData
 {
 public:
 
+
+
+
 	VulkanRenderer()
 	{
-	
+		VulkanRendererData::BindedVulkanContext = this;
 	}
 	~VulkanRenderer()
 	{
@@ -337,6 +341,8 @@ private:
 
 	void CreateDescriptorSetLayout()
 	{
+		//Vertex Shader bionding 0
+
 		VkDescriptorSetLayoutBinding uboLayoutBinding{};
 		uboLayoutBinding.binding = 0;
 		uboLayoutBinding.descriptorCount = 1;
@@ -344,6 +350,7 @@ private:
 		uboLayoutBinding.pImmutableSamplers = nullptr;
 		uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 
+		//Fragment Shader texture bidning 1
 		VkDescriptorSetLayoutBinding samplerLayoutBinding{};
 		samplerLayoutBinding.binding = 1;
 		samplerLayoutBinding.descriptorCount = 1;
@@ -364,22 +371,10 @@ private:
 	}
 
 
-	void CreateUniformBuffers() 
-	{
-		VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+	void CreateUniformBuffers();
 
-		uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
-		uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-		uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
 
-		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-			VkUtils::CreateBuffer(*this,bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &uniformBuffers[i], &uniformBuffersMemory[i]);
-
-			vkMapMemory(device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
-		}
-	}
-
-	void UpdateUniformBuffer(uint32_t currentImage);
+	void UpdateUniformBuffer(uint32_t currentImage );
 
 
 	void CreateDescriptorPool()

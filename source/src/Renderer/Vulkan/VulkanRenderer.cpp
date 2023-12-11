@@ -3,6 +3,7 @@
 #include "Resource/ResourceManager.hpp"
 #include "Core/ECS/Scene.hpp"
 #include "Renderer/Camera/Camera.hpp"
+#include <Renderer/MeshRenderer.h>
 
 
 void VulkanRenderer::GetRessourceManager(ResourceManager* _ressourceManager)
@@ -10,27 +11,38 @@ void VulkanRenderer::GetRessourceManager(ResourceManager* _ressourceManager)
 	m_ressourceManager = _ressourceManager;
 }
 
+void VulkanRenderer::CreateUniformBuffers()
+{
+
+	VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+
+	uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+	uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+	uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+
+	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+		VkUtils::CreateBuffer(*this, bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, &uniformBuffers[i], &uniformBuffersMemory[i]);
+
+		vkMapMemory(device, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
+	}
+}
 void VulkanRenderer::UpdateUniformBuffer(uint32_t currentImage)
 {
-	static auto startTime = std::chrono::high_resolution_clock::now();
-
-	auto currentTime = std::chrono::high_resolution_clock::now();
-	float time = std::chrono::duration<float, std::chrono::seconds::period>(currentTime - startTime).count();
-
-	Transform* transfrom = Scene->GetComponent<Transform>(*Scene->GetEntitiesById(0));
 
 
 
-	UniformBufferObject ubo;
-	ubo.model = transfrom->Global;
+	UniformBufferObject ubo;	
 	Camera* cam = Camera::SetMainCamera();
-	cam->UpdateMainCamera();
 
-	ubo.view = Matrix4X4::LookAt(cam->GetTramsform().pos, Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
-	ubo.proj = Matrix4X4::PerspectiveMatrix(Math::Deg2Rad * 45.0f, swapChainExtent.width / (float)swapChainExtent.height, 0.1f, 10.0f);
+	ubo.view = cam->GetLookMatrix();
+	ubo.proj = Matrix4X4::PerspectiveMatrix(Math::Deg2Rad * 90, (float)swapChainExtent.width / (float)swapChainExtent.height, 0.001f, 1000.f);
 
 	memcpy(uniformBuffersMapped[currentImage], &ubo, sizeof(ubo));
+
 }
+
+
+
 
 void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::string fragmenShaderPath)
 {
@@ -128,12 +140,18 @@ void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::s
 	dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
 	dynamicState.pDynamicStates = dynamicStates.data();
 
+	VkPushConstantRange psRange;
+	psRange.offset = 0;
+	psRange.size = sizeof(Matrix4X4);
+	psRange.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
 	// be careful here !!!
 	pipelineLayoutInfo.setLayoutCount = 1;
 	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
-	pipelineLayoutInfo.pushConstantRangeCount = 0;
+	pipelineLayoutInfo.pushConstantRangeCount = 1;
+	pipelineLayoutInfo.pPushConstantRanges = &psRange;
 
 	if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create pipeline layout!");
@@ -171,6 +189,8 @@ void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::s
 void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex)
 {
 
+
+
 	VkCommandBufferBeginInfo beginInfo{};
 	beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
 	beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
@@ -198,6 +218,9 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	renderPassInfo.clearValueCount = static_cast<uint32_t>(clearValues.size());
 	renderPassInfo.pClearValues = clearValues.data();
 
+	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
 
 	VkViewport viewport{};
 	viewport.x = 0.0f;
@@ -214,33 +237,19 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
 
 
-	vkCmdBeginRenderPass(commandBuffer, &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-	vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, graphicsPipeline);
-
-
-
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
-	
 
-		// Start the Dear ImGui frame
+	// Start the Dear ImGui frame
 	ImGui_ImplVulkan_NewFrame();
 	ImGui_ImplGlfw_NewFrame();
 	ImGui::NewFrame();
 
-
-
 	Scene->Render(this);
-
-
-	
-
-
 
 	// Rendering
 	ImGui::Render();
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer, 0);
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffers[currentFrame], 0);
 
 
 	// Update and Render additional Platform Windows
@@ -251,13 +260,10 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 	}
 
 
+	//Scene->Render(this);
 
-	// End Draw
-	vkCmdEndRenderPass(commandBuffer);
-
-	if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
-		throw std::runtime_error("failed to record command buffer!");
-	}
+	
+	
 }
 
 
@@ -340,14 +346,26 @@ void VulkanRenderer::DrawFrame()
 
 
 
-	UpdateUniformBuffer(currentFrame);
-	//scene->RenderUpdate(this);
+
 
 	vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
 
 	vkResetFences(device, 1, &inFlightFences[currentFrame]);
 
+	UpdateUniformBuffer(currentFrame);
+
 	RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+
+
+
+
+
+	// End Draw
+	vkCmdEndRenderPass(commandBuffers[currentFrame]);
+
+	if (vkEndCommandBuffer(commandBuffers[currentFrame]) != VK_SUCCESS) {
+		throw std::runtime_error("failed to record command buffer!");
+	}
 
 
 

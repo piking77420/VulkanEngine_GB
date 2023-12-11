@@ -5,6 +5,7 @@
 #include "Renderer/Vulkan/VulkanConfig.hpp"
 #include "Physics/Transform.hpp"
 
+
 class Engine;
 
 class Scene
@@ -29,7 +30,10 @@ public :
 	template<class T>
 	inline static bool HasComponent(Entity* entity)
 	{
-		return !(entity->ComponentId.at(T::ID) ? ComponentNull : 0);
+		if (entity->ComponentId.at(T::ID) == ComponentNull)
+			return false;
+
+		return true;
 	}
 
 	template<class T>
@@ -157,15 +161,7 @@ public :
 		}
 	}
 
-	void RenderUpdate(VulkanRendererData* datarenderer)
-	{
-		for (System* sys : systems)
-		{
-			sys->UpdateRender(datarenderer, this);
-		}
-	}
-
-
+	
 	void Render(VulkanRendererData* datarenderer)
 	{
 		for (System* sys : systems)
@@ -189,5 +185,15 @@ private :
 	void AddComponentInternal(Entity& entity, uint32_t ComponentID, Component** ptr);
 
 	void RemoveComponentInternal(Entity& entity, uint32_t ComponentID);
+
+
+	void TriggerOnresizeDataEvent(uint32_t componentTypeID, std::vector<uint8_t>* data)
+	{
+		for (size_t i = 0; i < systems.size(); i++)
+		{
+			systems[i]->OnResizeData(componentTypeID, data);
+		}
+	}
+
 };
 

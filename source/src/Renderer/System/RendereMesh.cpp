@@ -2,6 +2,8 @@
 #include "Renderer/MeshRenderer.h"
 #include "Core/ECS/Scene.hpp"
 #include "Renderer/Vulkan/VulkanRenderer.hpp"
+#include "Renderer/Camera/Camera.hpp"
+#include "Resource/Texture.hpp"
 
 void RendereMesh::Begin(Scene* scene)
 {
@@ -11,74 +13,44 @@ void RendereMesh::Update(Scene* scene)
 {
 }
 
-void RendereMesh::UpdateRender(VulkanRendererData* datarenderer, Scene* scene)
-{
-	std::vector<MeshRenderer>& meshesRender = *scene->GetComponentData<MeshRenderer>();
-	std::vector<Transform>& transform = *scene->GetComponentData<Transform>();
-	/*
-	UniformBufferObject ubo;
-	ubo.view = Matrix4X4::LookAt(Vector3(2.0f, 2.0f, 2.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
-	ubo.proj = Matrix4X4::PerspectiveMatrix(Math::Deg2Rad * 45.0f, datarenderer->swapChainExtent.width / (float)datarenderer->swapChainExtent.height, 0.1f, 10.0f);
-	*/
-	for (int i = 0; i < meshesRender.size(); i++)
-	{
-		MeshRenderer& mesh = meshesRender[i];
 
-
-		if (!mesh.model)
-			continue;
-
-		/*
-		Transform* transform = scene->GetComponent<Transform>(mesh.entityId);
-
-		// Update Uniform
-		ubo.model = transform->Global;
-		memcpy(datarenderer->uniformBuffersMapped[datarenderer->currentFrame], &ubo, sizeof(ubo));
-		*/
-	}
-}
 
 void RendereMesh::Render(VulkanRendererData* datarenderer, Scene* scene)
 {
-	
-	
-	std::vector<MeshRenderer>& meshesRender = *scene->GetComponentData<MeshRenderer>();
-	std::vector<Transform>& transform = *scene->GetComponentData<Transform>();
-	/*
-	UniformBufferObject ubo;
-	ubo.view = Matrix4X4::LookAt(Vector3(2.0f, 2.0f, 2.0f), Vector3(0.0f, 0.0f, 0.0f), Vector3(0.0f, 0.0f, 1.0f));
-	ubo.proj = Matrix4X4::PerspectiveMatrix(Math::Deg2Rad * 45.0f, datarenderer->swapChainExtent.width / (float)datarenderer->swapChainExtent.height, 0.1f, 10.0f);
-	*/
-	for(int i = 0 ; i < meshesRender.size(); i++)
+	std::vector<Transform>* transformData = scene->GetComponentData<Transform>();
+
+	if (transformData->empty())
+		return;
+
+	for (size_t i = 0; i < transformData->size(); i++)
 	{
-		MeshRenderer& mesh = meshesRender[i];
+		Transform* transform = &transformData->at(i);
 
 
-		if (!mesh.model)
+
+		if (!scene->HasComponent<MeshRenderer>(scene->GetEntitiesById(transform->entityId)))
 			continue;
-		
-		/*
-		Transform* transform = scene->GetComponent<Transform>(mesh.entityId);
-		
-		// Update Uniform 
-		ubo.model = transform->Global;
-		memcpy(datarenderer->uniformBuffersMapped[datarenderer->currentFrame], &ubo, sizeof(ubo));
-		*/
 
 
-		
+		MeshRenderer* mesh = scene->GetComponent<MeshRenderer>(transform->entityId);
 		VkCommandBuffer* commandbuffer = &datarenderer->commandBuffers[datarenderer->currentFrame];
-		
-		VkBuffer vertexBuffers[] = { mesh.model->vertexBuffer };
+
+
+
+		vkCmdPushConstants(*commandbuffer, datarenderer->pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT, 0, sizeof(Matrix4X4), &transform->Global);
+
+
+		VkBuffer vertexBuffers[] = { mesh->model->vertexBuffer };
 		VkDeviceSize offsets[] = { 0 };
+
 		vkCmdBindVertexBuffers(*commandbuffer, 0, 1, vertexBuffers, offsets);
 
-		vkCmdBindIndexBuffer(*commandbuffer, mesh.model->indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+		vkCmdBindIndexBuffer(*commandbuffer, mesh->model->indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
 		vkCmdBindDescriptorSets(*commandbuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, datarenderer->pipelineLayout, 0, 1, &datarenderer->descriptorSets[datarenderer->currentFrame], 0, nullptr);
 
-		vkCmdDrawIndexed(*commandbuffer, static_cast<uint32_t>(mesh.model->indices.size()), 1, 0, 0, 0);
-		
+
+		vkCmdDrawIndexed(*commandbuffer, static_cast<uint32_t>(mesh->model->indices.size()), 1, 0, 0, 0);
 
 	}
 
@@ -86,4 +58,20 @@ void RendereMesh::Render(VulkanRendererData* datarenderer, Scene* scene)
 
 void RendereMesh::FixedUpdate(Scene* scene)
 {
+}
+
+void RendereMesh::BindTexture(VulkanRendererData* datarenderer, Scene* scene,Texture* texture)
+{
+	return;
+
+	std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, datarenderer->descriptorSetLayout);
+	VkDescriptorSetAllocateInfo allocInfo{};
+	allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	allocInfo.descriptorPool = datarenderer->descriptorPool;
+	allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+	allocInfo.pSetLayouts = layouts.data();
+
+
+
+
 }

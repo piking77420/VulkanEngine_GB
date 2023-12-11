@@ -20,17 +20,20 @@ void Hierachy::Render(VulkanRendererData* datarenderer, Scene* scene)
 	if(ImGui::Begin("Hierachy"))
 	{
 		
-		ImGui::CollapsingHeader("Hierachy");
 
 		for (std::vector<Transform>::iterator it = transform->begin(); it != transform->end(); it++)
 		{
 			Transform& ptr = *it;
+
+			ImGui::CollapsingHeader(("entity " + std::to_string(ptr.entityId)).c_str());
+			ImGui::PushID(ptr.entityId);
 
 			ImGui::DragFloat3("Pos", ptr.pos.SetPtr());
 			ImGui::DragFloat3("rotation", ptr.rotation.SetPtr());
 
 			ImGui::DragFloat3("scale", ptr.scale.SetPtr());
 
+			ImGui::PopID();
 
 
 		}

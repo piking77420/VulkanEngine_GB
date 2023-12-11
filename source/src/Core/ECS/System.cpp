@@ -12,10 +12,7 @@ void System::Update(Scene* scene)
 }
 
 
-void System::UpdateRender(VulkanRendererData* datarenderer, Scene* scene)
-{
 
-}
 
 void System::Render(VulkanRendererData* datarenderer, Scene* scene)
 {

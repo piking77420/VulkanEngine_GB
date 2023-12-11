@@ -7,7 +7,7 @@
 
 #include "Physics/Test.hpp"
 #include "Resource/ResourceManager.hpp"
-
+#include "Renderer/Camera/Camera.hpp"
 
 class Engine
 {
@@ -15,11 +15,13 @@ public:
 
 	void EngineRun()
 	{
+		Camera* cam = Camera::SetMainCamera();
 
 		while (!glfwWindowShouldClose(m_Window))
 		{
 			glfwPollEvents();
 			scene.FixedUpdate();
+			cam->UpdateMainCamera();
 			scene.Update();
 			m_VkRenderer.Draw();
 		}
@@ -60,6 +62,8 @@ private:
 		// &m_VkRenderer is correct dont move it 
 		glfwSetWindowUserPointer(m_Window, &m_VkRenderer);
 		glfwSetFramebufferSizeCallback(m_Window, FramebufferResizeCallback);
+
+		glfwSetCursorPosCallback(m_Window, Camera::MouseCallback);
 
 	}
 

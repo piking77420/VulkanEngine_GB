@@ -13,6 +13,8 @@ Engine::Engine()
 	m_VkRenderer.GetScene(&scene);
 	m_VkRenderer.InitVulkan();
 
+	
+
 	m_ressourceManager.GetVulkanRenderer(m_VkRenderer);
 	m_ressourceManager.Create<Texture>("Texture/viking_room.png");
 	m_VkRenderer.GetRessourceManager(&m_ressourceManager);
@@ -23,16 +25,16 @@ Engine::Engine()
 	m_ressourceManager.Create<Model>("Model/viking_room.obj");
 	// Init Scene // 
 
+	for (size_t i = 0; i < 5; i++)	
+	{
+		Entity* ent = scene.CreateEntity();
 
-	Entity* ent =  scene.CreateEntity();
+		Transform* transfrom = scene.GetComponent<Transform>(*ent);
+		scene.AddComponent<MeshRenderer>(ent);
+		MeshRenderer* mesh = scene.GetComponent<MeshRenderer>(*ent);
+		mesh->model = m_ressourceManager.GetResource<Model>("Model/viking_room.obj");
+	}
 	
-
-	Transform* transfrom = scene.GetComponent<Transform>(*scene.GetEntitiesById(0));
-
-
-	scene.AddComponent<MeshRenderer>(ent);
-	MeshRenderer* mesh  = scene.GetComponent<MeshRenderer>(*ent);
-	mesh->model = m_ressourceManager.GetResource<Model>("Model/viking_room.obj");
 
 	scene.AddSystem<GraphScene>();
 	scene.AddSystem<RendereMesh>();
