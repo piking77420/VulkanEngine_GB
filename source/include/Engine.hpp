@@ -23,9 +23,7 @@ public:
 			scene.FixedUpdate();
 			cam->UpdateMainCamera();
 			scene.Update();
-			imgui.NewFrame();
 			m_VkRenderer.Draw();
-			imgui.NewFrame();
 		}
 		m_VkRenderer.RendererWait();
 		
@@ -37,6 +35,7 @@ public:
 
 	~Engine()
 	{
+		
 		m_ressourceManager.DestroyAllResource(m_VkRenderer);
 		m_VkRenderer.CleanUpVulkan();
 		glfwDestroyWindow(m_Window);
@@ -53,7 +52,6 @@ private:
 	VulkanRenderer m_VkRenderer;
 	Scene scene;
 	ResourceManager m_ressourceManager;
-	ImguiVulkan imgui;
 
 	void InitWindow()
 	{
