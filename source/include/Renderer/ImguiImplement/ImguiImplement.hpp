@@ -9,26 +9,19 @@ class ImguiVulkan
 {
 public : 
 
-	void Init();
-
-
-	void NewFrame();
 	
-
-	void Render();
-	
+	void InitImguiPipline();
+	void GetVulkanData(class VulkanRendererData* vkdata);
 
 	~ImguiVulkan();
 
 
 private:
+	VkPhysicalDevice SetupVulkan_SelectPhysicalDevice();
+	void CreateDevice();
 
 
-	static VkPhysicalDevice SetupVulkan_SelectPhysicalDevice();
-	static void SetupVulkan(ImVector<const char*> instance_extensions);
-	static void CleanupVulkan();
-	static void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data);
-	static void FramePresent(ImGui_ImplVulkanH_Window* wd);
+	static inline VkPipeline ImguiPipeLine = VK_NULL_HANDLE;
 
 
 	// Data

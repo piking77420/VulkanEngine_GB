@@ -67,7 +67,7 @@ struct VulkanRendererData
 	VkImageView depthImageView;
 
 
-
+	static VkPipeline ImguiPipeLine;
 
 
 private:
