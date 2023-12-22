@@ -19,12 +19,6 @@ static void check_vk_result(VkResult err)
 
 void VulkanRenderer::CleanUpVulkan()
 {
-
-
-	ImGui_ImplVulkan_Shutdown();
-	ImGui_ImplGlfw_Shutdown();
-	ImGui::DestroyContext();
-
 	CleanupSwapChain();
 
 	for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
@@ -69,6 +63,12 @@ void VulkanRenderer::GetRessourceManager(ResourceManager* _ressourceManager)
 	m_ressourceManager = _ressourceManager;
 }
 
+void VulkanRenderer::ResizeVulkan()
+{
+	framebufferResized = true;
+	imguivulkan.g_SwapChainRebuild = true;
+}
+
 void VulkanRenderer::CreateUniformBuffers()
 {
 
@@ -96,56 +96,6 @@ void VulkanRenderer::UpdateUniformBuffer(uint32_t currentImage)
 
 }
 
-
-
-
-void VulkanRenderer::InitImgui()
-{ 	// Setup Dear ImGui context
-	IMGUI_CHECKVERSION();
-	ImGui::CreateContext();
-	ImGuiIO& io = ImGui::GetIO(); (void)io;
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
-	//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-	io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-	io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
-	//io.ConfigViewportsNoAutoMerge = true;
-	//io.ConfigViewportsNoTaskBarIcon = true;
-
-	// Setup Dear ImGui style
-	ImGui::StyleColorsDark();
-	//ImGui::StyleColorsLight();
-
-	// When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-	ImGuiStyle& style = ImGui::GetStyle();
-
-	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-
-		style.WindowRounding = 0.0f;
-		style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-	}
-
-	// Setup Platform/Renderer backends
-	ImGui_ImplGlfw_InitForVulkan(window, true);
-	ImGui_ImplVulkan_InitInfo init_info = {};
-	init_info.Instance = instance;
-	init_info.PhysicalDevice = physicalDevice;
-	init_info.Device = device;
-	init_info.QueueFamily = 0;
-	init_info.Queue = graphicsQueue;
-	init_info.PipelineCache = VK_NULL_HANDLE;
-	init_info.DescriptorPool = descriptorPool;
-	init_info.Subpass = 0;
-	init_info.MinImageCount = MAX_FRAMES_IN_FLIGHT;
-	init_info.ImageCount = MAX_FRAMES_IN_FLIGHT;
-	init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-	init_info.CheckVkResultFn = check_vk_result;
-	ImGui_ImplVulkan_Init(&init_info, renderPass);
-
-
-
-
-}
 
 void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::string fragmenShaderPath)
 {
@@ -340,26 +290,14 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
+	imguivulkan.ImguiNewFramme();
 
-	ImGui_ImplVulkan_NewFrame();
-	ImGui_ImplGlfw_NewFrame();
-	ImGui::NewFrame();
+	static bool openWindow = true;
 
 	Scene->Render(this);
+	ImGui::ShowDemoWindow(&openWindow);
 
-
-	static bool t = true;
-	ImGui::ShowDemoWindow(&t);
-	ImGui::Render();
-	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffers[currentFrame]);
-
-
-	// Update and Render additional Platform Windows
-	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-	{
-		ImGui::UpdatePlatformWindows();
-		ImGui::RenderPlatformWindowsDefault();
-	}
+	imguivulkan.ImguiEndFramme();
 }
 
 
@@ -381,7 +319,8 @@ void VulkanRenderer::DrawFrame()
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
 		RecreateSwapChain();
-		ImGui_ImplVulkan_SetMinImageCount(2);
+		imguivulkan.OnResizeFrammeBuffer();
+		
 		return;
 	}
 	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {

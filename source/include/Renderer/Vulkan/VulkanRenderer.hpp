@@ -1,6 +1,8 @@
 #pragma once
 #define GLFW_INCLUDE_VULKAN
 #include <Core/Core.h>
+
+#include "Renderer/ImguiImplement/ImguiVulkan.hpp"
 #include "Renderer/Vulkan/VulkanHeader.hpp"
 
 #include "Resource/ResourceManager.hpp"
@@ -12,15 +14,7 @@ const static inline bool enableValidationLayers = true;
 #endif
 
 #define MAX_FRAMES_IN_FLIGHT  2
-#define CREATEGETTERSETTER(Varname,VarType,FuncAlias)\
-VarType& Set##FuncAlias() \
-    { \
-        return Varname; \
-    } \
-    const VarType& Get##FuncAlias() const \
-    { \
-        return Varname; \
-    }
+
 
 class Scene;
 
@@ -78,6 +72,7 @@ public:
 		VulkanInstance::CreateInstance(&instance, validationLayers, enableValidationLayers);
 		VkInit::SetupDebugMessenger(instance, &debugMessenger);
 		VkInit::CreateSurface(&instance, window, &surface);
+		imguivulkan.InitImgui(this, window);
 		VkInit::PickPhysicalDevice(instance, physicalDevice, surface);
 		Device::CreateLogicalDevice(device, physicalDevice, validationLayers, graphicsQueue, presentQueue, surface, deviceExtensions);
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
@@ -88,15 +83,9 @@ public:
 		CreateCommandPool();
 		CreateDepthResources();
 		VkUtils::CreateFramebuffers(*this);
-
-
-
 	}
 	void InitRendering()
 	{
-
-		//VkUtils::CreateVertexBuffer(*this,vertices,vertexBuffer,vertexBufferMemory);
-		//VkUtils::CreateIndexBuffer(*this, indices,indexBuffer, indexBufferMemory);
 		CreateUniformBuffers();
 		CreateDescriptorPool();
 		CreateDescriptorSets();
@@ -124,13 +113,13 @@ public:
 		Scene = _scene;
 	}
 
-
-	void InitImgui();
+	void ResizeVulkan();
 
 private: 
 
 	ResourceManager* m_ressourceManager;
 	Scene* Scene;
+	ImguiVulkan imguivulkan;
 
 	
 	const std::vector<const char*> validationLayers = {

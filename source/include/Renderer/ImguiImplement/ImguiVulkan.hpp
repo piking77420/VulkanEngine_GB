@@ -1,3 +1,4 @@
+#pragma once
 #include <Renderer/Vulkan/VulkanConfig.hpp>
 #include<Imgui/imgui.h>
 #include<Imgui/imgui_impl_glfw.h>
@@ -9,23 +10,36 @@ class ImguiVulkan
 {
 public : 
 
-	
-	void InitImguiPipline();
-	void GetVulkanData(class VulkanRendererData* vkdata);
+	static inline bool   g_SwapChainRebuild = false;
+
+	void InitImgui(VulkanRendererData* vkdata,GLFWwindow* mainWindow);
+
+	void OnResizeFrammeBuffer();
+
+	void ImguiNewFramme();
+
+	void ImguiEndFramme();
 
 	~ImguiVulkan();
 
 
 private:
-	VkPhysicalDevice SetupVulkan_SelectPhysicalDevice();
-	void CreateDevice();
+	void SetupVulkan(ImVector<const char*> instance_extensions);
+
+	static void glfw_error_callback(int error, const char* description);
+	
+	static void check_vk_result(VkResult err);
+	
+
+	static bool IsExtensionAvailable(const ImVector<VkExtensionProperties>& properties, const char* extension);
+	
+	static void SetupVulkanWindow(ImGui_ImplVulkanH_Window* wd, VkSurfaceKHR surface, int width, int height);
 
 
-	static inline VkPipeline ImguiPipeLine = VK_NULL_HANDLE;
+	static VkPhysicalDevice SetupVulkan_SelectPhysicalDevice();
+	
 
-
-	// Data
-	static inline VkAllocationCallbacks*	g_Allocator = nullptr;
+	static inline VkAllocationCallbacks*   g_Allocator = nullptr;
 	static inline VkInstance               g_Instance = VK_NULL_HANDLE;
 	static inline VkPhysicalDevice         g_PhysicalDevice = VK_NULL_HANDLE;
 	static inline VkDevice                 g_Device = VK_NULL_HANDLE;
@@ -37,6 +51,4 @@ private:
 
 	static inline ImGui_ImplVulkanH_Window g_MainWindowData;
 	static inline int                      g_MinImageCount = 2;
-	static inline bool                     g_SwapChainRebuild = false;
-
 };

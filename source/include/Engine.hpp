@@ -5,10 +5,12 @@
 #include "Core/ECS/Scene.hpp"
 #include "Physics/GraphScene.h"
 
-#include "Physics/Test.hpp"
+#include "Renderer/ImguiImplement/ImguiVulkan.hpp"
 #include "Resource/ResourceManager.hpp"
 #include "Renderer/Camera/Camera.hpp"
-#include "Renderer/ImguiImplement/ImguiImplement.hpp"
+#include "Renderer\ImguiImplement\ImguiVulkan.hpp"
+
+
 class Engine
 {
 public:
@@ -52,6 +54,8 @@ private:
 	VulkanRenderer m_VkRenderer;
 	Scene scene;
 	ResourceManager m_ressourceManager;
+	
+
 
 	void InitWindow()
 	{
@@ -79,7 +83,8 @@ private:
 	static void FramebufferResizeCallback(GLFWwindow* window, int width, int height)
 	{
 		auto vulkanRenderer = reinterpret_cast<VulkanRenderer*>(glfwGetWindowUserPointer(window));
-		vulkanRenderer->framebufferResized = true;
+		vulkanRenderer->ResizeVulkan();
+			
 	}
 };
 

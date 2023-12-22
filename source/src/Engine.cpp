@@ -18,8 +18,6 @@ Engine::Engine()
 	m_ressourceManager.Create<Texture>("Texture/viking_room.png");
 	m_VkRenderer.GetRessourceManager(&m_ressourceManager);
 	m_VkRenderer.InitRendering();
-	m_VkRenderer.InitImgui();
-
 
 
 	m_ressourceManager.Create<Model>("Model/viking_room.obj");
