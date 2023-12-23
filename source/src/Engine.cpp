@@ -4,7 +4,7 @@
 #include "Renderer/System/RendereMesh.hpp"
 #include "Renderer/MeshRenderer.h"
 #include "ViewPort/Hierachy.hpp"
-
+#include "ViewPort/SceneView.hpp"
 
 Engine::Engine()
 {
@@ -18,6 +18,7 @@ Engine::Engine()
 	m_ressourceManager.Create<Texture>("Texture/viking_room.png");
 	m_VkRenderer.GetRessourceManager(&m_ressourceManager);
 	m_VkRenderer.InitRendering();
+	imguivulkan.InitImgui(&m_VkRenderer, m_Window);
 
 
 	m_ressourceManager.Create<Model>("Model/viking_room.obj");
@@ -37,6 +38,8 @@ Engine::Engine()
 	scene.AddSystem<GraphScene>();
 	scene.AddSystem<RendereMesh>();
 	scene.AddSystem<Hierachy>();
+	scene.AddSystem<SceneView>();
+
 
 	scene.Begin();
 

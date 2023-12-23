@@ -13,7 +13,7 @@ namespace VkUtils
 {
 
 
-    static VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) 
+    static inline  VkSurfaceFormatKHR ChooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>& availableFormats) 
     {
         for (const auto& availableFormat : availableFormats) 
         {
@@ -26,7 +26,7 @@ namespace VkUtils
         return availableFormats[0];
     }
 
-    static VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
+    static inline  VkPresentModeKHR ChooseSwapPresentMode(const std::vector<VkPresentModeKHR>& availablePresentModes)
     {
         for (const auto& availablePresentMode : availablePresentModes) {
             if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
@@ -37,7 +37,7 @@ namespace VkUtils
         return VK_PRESENT_MODE_FIFO_KHR;
     }
 
-    static VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* _window)
+    static inline  VkExtent2D ChooseSwapExtent(const VkSurfaceCapabilitiesKHR& capabilities, GLFWwindow* _window)
     {
         if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
         {
@@ -59,7 +59,7 @@ namespace VkUtils
         }
     }
 
-    static SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice& device, VkSurfaceKHR& surface)
+    static inline SwapChainSupportDetails QuerySwapChainSupport(VkPhysicalDevice& device, VkSurfaceKHR& surface)
     {
         SwapChainSupportDetails details;
 
@@ -84,7 +84,7 @@ namespace VkUtils
         return details;
     }
 
-    static void CreateSwapChain(GLFWwindow* _window, VkPhysicalDevice& _physicalDevice, VkSurfaceKHR& surface, VkSwapchainKHR& _swapChain, VkDevice& _device
+    static inline void CreateSwapChain(GLFWwindow* _window, VkPhysicalDevice& _physicalDevice, VkSurfaceKHR& surface, VkSwapchainKHR& _swapChain, VkDevice& _device
         , std::vector<VkImage>& _swapChainImages, VkFormat& _swapChainImageFormat, VkExtent2D& _swapChainExtent)
     {
         SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(_physicalDevice, surface);

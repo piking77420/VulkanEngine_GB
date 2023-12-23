@@ -193,6 +193,7 @@
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanRenderer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanShader.cpp" />
     <ClCompile Include="source\src\Core\ECS\System.cpp" />
+    <ClCompile Include="source\src\ViewPort\SceneView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\include\Renderer\Camera\Camera.hpp" />
@@ -249,6 +250,7 @@
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanInstance.hpp" />
     <ClInclude Include="source\include\Core\ECS\System.hpp" />
     <ClInclude Include="source\include\Resource\Texture.hpp" />
+    <ClInclude Include="source\include\ViewPort\SceneView.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="source\src\External\Lib\glfw3.lib" />

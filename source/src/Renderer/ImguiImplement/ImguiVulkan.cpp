@@ -1,5 +1,7 @@
 #include "..\..\..\include\Renderer\ImguiImplement\ImguiVulkan.hpp"
 
+#define MAX_FRAMES_IN_FLIGHT 2 
+
 void ImguiVulkan::glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
@@ -219,35 +221,6 @@ void ImguiVulkan::SetupVulkanWindow(ImGui_ImplVulkanH_Window* wd, VkSurfaceKHR s
 
 void ImguiVulkan::InitImgui(VulkanRendererData* vkdata,GLFWwindow* mainWindow)
 {
-    g_Instance = vkdata->instance;
- 
-    
-
-    ImVector<const char*> extensions;
-    uint32_t extensions_count = 0;
-    const char** glfw_extensions = glfwGetRequiredInstanceExtensions(&extensions_count);
-    for (uint32_t i = 0; i < extensions_count; i++)
-        extensions.push_back(glfw_extensions[i]);
-    SetupVulkan(extensions);
-
-    
-    // Create Window Surface
-    //VkResult err = glfwCreateWindowSurface(g_Instance, mainWindow, g_Allocator, &vkdata->surface);
-    //check_vk_result(err);
-
-
-    // Create Framebuffers
-    int w, h;
-    glfwGetFramebufferSize(mainWindow, &w, &h);
-    ImGui_ImplVulkanH_Window* wd = &g_MainWindowData;
-    SetupVulkanWindow(wd, vkdata->surface, w, h);
-
-
-	/*if (vkCreateGraphicsPipelines(g_Device, VK_NULL_HANDLE, 1, &, nullptr, &ImguiPipeLine) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create graphics pipeline!");
-	}*/
-
-
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -255,7 +228,7 @@ void ImguiVulkan::InitImgui(VulkanRendererData* vkdata,GLFWwindow* mainWindow)
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    //io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
     //io.ConfigViewportsNoAutoMerge = true;
     //io.ConfigViewportsNoTaskBarIcon = true;
 
@@ -274,20 +247,23 @@ void ImguiVulkan::InitImgui(VulkanRendererData* vkdata,GLFWwindow* mainWindow)
     // Setup Platform/Renderer backends
     ImGui_ImplGlfw_InitForVulkan(mainWindow, true);
     ImGui_ImplVulkan_InitInfo init_info = {};
-    init_info.Instance = g_Instance;
-    init_info.PhysicalDevice = g_PhysicalDevice;
-    init_info.Device = g_Device;
-    init_info.QueueFamily = g_QueueFamily;
-    init_info.Queue = g_Queue;
-    init_info.PipelineCache = g_PipelineCache;
-    init_info.DescriptorPool = g_DescriptorPool;
+    init_info.Instance = vkdata->instance;
+    init_info.PhysicalDevice = vkdata->physicalDevice;
+    init_info.Device = vkdata->device;
+    init_info.QueueFamily = 0;
+    init_info.Queue = vkdata->graphicsQueue;
+    init_info.PipelineCache = VK_NULL_HANDLE;
+    init_info.DescriptorPool = vkdata->descriptorPool;
     init_info.Subpass = 0;
-    init_info.MinImageCount = g_MinImageCount;
-    init_info.ImageCount = wd->ImageCount;
+    init_info.MinImageCount = MAX_FRAMES_IN_FLIGHT;
+    init_info.ImageCount = MAX_FRAMES_IN_FLIGHT;
     init_info.MSAASamples = VK_SAMPLE_COUNT_1_BIT;
-    init_info.Allocator = g_Allocator;
     init_info.CheckVkResultFn = check_vk_result;
-    ImGui_ImplVulkan_Init(&init_info, wd->RenderPass);
+
+
+
+    ImGui_ImplVulkan_Init(&init_info, vkdata->renderPass);
+
 }
 
 void ImguiVulkan::OnResizeFrammeBuffer()
@@ -313,22 +289,33 @@ void ImguiVulkan::ImguiNewFramme()
     ImGui_ImplVulkan_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
+
+
+
+
 }
 
-void ImguiVulkan::ImguiEndFramme()
+void ImguiVulkan::ImguiEndFramme(VkCommandBuffer commandBuffer)
 {
-    // Rendering
-    ImGui::Render();
-    ImDrawData* main_draw_data = ImGui::GetDrawData();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
+  	// Rendering
+	ImGui::Render();
+	ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), commandBuffer, 0);
 
 
-    // Update and Render additional Platform Windows
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
-        ImGui::UpdatePlatformWindows();
-        ImGui::RenderPlatformWindowsDefault();
-    }
+	// Update and Render additional Platform Windows
+	if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
+
+}
+
+void ImguiVulkan::DestroyImgui()
+{
+    ImGui_ImplVulkan_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
 }
 
 

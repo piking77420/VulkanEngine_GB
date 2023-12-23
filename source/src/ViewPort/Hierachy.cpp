@@ -20,7 +20,6 @@ void Hierachy::Render(VulkanRendererData* datarenderer, Scene* scene)
 
 	std::vector<Transform>* transform = scene->GetComponentData<Transform>();
 	
-	return;
 
 	if(ImGui::Begin("Hierachy"))
 	{

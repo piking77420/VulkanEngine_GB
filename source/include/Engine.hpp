@@ -22,10 +22,14 @@ public:
 		while (!glfwWindowShouldClose(m_Window))
 		{
 			glfwPollEvents();
+			imguivulkan.ImguiNewFramme();
+
 			scene.FixedUpdate();
 			cam->UpdateMainCamera();
 			scene.Update();
 			m_VkRenderer.Draw();
+			imguivulkan.ImguiEndFramme(m_VkRenderer.commandBuffers[m_VkRenderer.currentFrame]);
+			m_VkRenderer.Endraw();
 		}
 		m_VkRenderer.RendererWait();
 		
@@ -37,7 +41,7 @@ public:
 
 	~Engine()
 	{
-		
+		imguivulkan.DestroyImgui();
 		m_ressourceManager.DestroyAllResource(m_VkRenderer);
 		m_VkRenderer.CleanUpVulkan();
 		glfwDestroyWindow(m_Window);
@@ -54,7 +58,8 @@ private:
 	VulkanRenderer m_VkRenderer;
 	Scene scene;
 	ResourceManager m_ressourceManager;
-	
+	ImguiVulkan imguivulkan;
+
 
 
 	void InitWindow()

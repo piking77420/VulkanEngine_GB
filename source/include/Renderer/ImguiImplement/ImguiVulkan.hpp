@@ -18,7 +18,9 @@ public :
 
 	void ImguiNewFramme();
 
-	void ImguiEndFramme();
+	void ImguiEndFramme(VkCommandBuffer commandBuffer);
+
+	void DestroyImgui();
 
 	~ImguiVulkan();
 
@@ -48,6 +50,8 @@ private:
 	static inline VkDebugReportCallbackEXT g_DebugReport = VK_NULL_HANDLE;
 	static inline VkPipelineCache          g_PipelineCache = VK_NULL_HANDLE;
 	static inline VkDescriptorPool         g_DescriptorPool = VK_NULL_HANDLE;
+	static inline VkRenderPass g_RendererPass = VK_NULL_HANDLE;
+
 
 	static inline ImGui_ImplVulkanH_Window g_MainWindowData;
 	static inline int                      g_MinImageCount = 2;

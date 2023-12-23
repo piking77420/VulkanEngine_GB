@@ -183,7 +183,10 @@
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanConfig.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="source\src\Renderer\ImguiImplement\ImguiImplement.cpp">
+    <ClCompile Include="source\src\Renderer\ImguiImplement\ImguiVulkan.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\src\ViewPort\SceneView.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -347,7 +350,10 @@
     <ClInclude Include="source\include\Renderer\Camera\Camera.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="source\include\Renderer\ImguiImplement\ImguiImplement.hpp">
+    <ClInclude Include="source\include\Renderer\ImguiImplement\ImguiVulkan.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
+    <ClInclude Include="source\include\ViewPort\SceneView.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

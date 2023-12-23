@@ -66,7 +66,6 @@ void VulkanRenderer::GetRessourceManager(ResourceManager* _ressourceManager)
 void VulkanRenderer::ResizeVulkan()
 {
 	framebufferResized = true;
-	imguivulkan.g_SwapChainRebuild = true;
 }
 
 void VulkanRenderer::CreateUniformBuffers()
@@ -239,6 +238,7 @@ void VulkanRenderer::CreateGraphicsPipeline(std::string vertexShaderPath, std::s
 
 }
 
+
 void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex)
 {
 
@@ -290,14 +290,13 @@ void VulkanRenderer::RecordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
 
 	vkCmdBindDescriptorSets(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, pipelineLayout, 0, 1, &descriptorSets[currentFrame], 0, nullptr);
 
-	imguivulkan.ImguiNewFramme();
 
-	static bool openWindow = true;
+
 
 	Scene->Render(this);
-	ImGui::ShowDemoWindow(&openWindow);
 
-	imguivulkan.ImguiEndFramme();
+
+
 }
 
 
@@ -306,44 +305,8 @@ void VulkanRenderer::Draw()
 	DrawFrame();
 }
 
-
-
-
-
-void VulkanRenderer::DrawFrame()
+void VulkanRenderer::Endraw()
 {
-	vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
-
-	uint32_t imageIndex;
-	VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
-
-	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
-		RecreateSwapChain();
-		imguivulkan.OnResizeFrammeBuffer();
-		
-		return;
-	}
-	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
-		throw std::runtime_error("failed to acquire swap chain image!");
-	}
-
-
-
-
-
-
-	vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
-
-	vkResetFences(device, 1, &inFlightFences[currentFrame]);
-
-	UpdateUniformBuffer(currentFrame);
-
-	RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
-
-
-
-
-
 	// End Draw
 	vkCmdEndRenderPass(commandBuffers[currentFrame]);
 
@@ -385,7 +348,8 @@ void VulkanRenderer::DrawFrame()
 
 	presentInfo.pImageIndices = &imageIndex;
 
-	result = vkQueuePresentKHR(presentQueue, &presentInfo);
+	
+	VkResult result = vkQueuePresentKHR(presentQueue, &presentInfo);
 
 	if (result == VK_ERROR_OUT_OF_DATE_KHR || result == VK_SUBOPTIMAL_KHR || framebufferResized)
 	{
@@ -397,6 +361,46 @@ void VulkanRenderer::DrawFrame()
 	}
 
 	currentFrame = (currentFrame + 1) % MAX_FRAMES_IN_FLIGHT;
+}
+
+
+
+
+
+void VulkanRenderer::DrawFrame()
+{
+	vkWaitForFences(device, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
+
+	uint32_t imageIndex;
+	VkResult result = vkAcquireNextImageKHR(device, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
+
+	if (result == VK_ERROR_OUT_OF_DATE_KHR) {
+		RecreateSwapChain();
+		
+		return;
+	}
+	else if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR) {
+		throw std::runtime_error("failed to acquire swap chain image!");
+	}
+
+
+
+
+
+
+	vkResetCommandBuffer(commandBuffers[currentFrame], /*VkCommandBufferResetFlagBits*/ 0);
+
+	vkResetFences(device, 1, &inFlightFences[currentFrame]);
+
+	UpdateUniformBuffer(currentFrame);
+
+	RecordCommandBuffer(commandBuffers[currentFrame], imageIndex);
+
+
+
+
+
+
 }
 
 void VulkanRenderer::CleanupSwapChain()

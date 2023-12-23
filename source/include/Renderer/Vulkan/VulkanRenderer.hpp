@@ -38,7 +38,8 @@ public:
 
 	void Draw();
 	
-
+	// temporaty to do draw vulkan to a a texture 
+	void Endraw();
 
 
 	void RendererWait()
@@ -53,6 +54,8 @@ public:
 		while (width == 0 || height == 0) {
 			glfwGetFramebufferSize(window, &width, &height);
 			glfwWaitEvents();
+
+			ImGui_ImplVulkan_SetMinImageCount(2);
 		}
 		vkDeviceWaitIdle(device);
 
@@ -72,7 +75,6 @@ public:
 		VulkanInstance::CreateInstance(&instance, validationLayers, enableValidationLayers);
 		VkInit::SetupDebugMessenger(instance, &debugMessenger);
 		VkInit::CreateSurface(&instance, window, &surface);
-		imguivulkan.InitImgui(this, window);
 		VkInit::PickPhysicalDevice(instance, physicalDevice, surface);
 		Device::CreateLogicalDevice(device, physicalDevice, validationLayers, graphicsQueue, presentQueue, surface, deviceExtensions);
 		VkUtils::CreateSwapChain(window, physicalDevice, surface, swapChain, device, swapChainImages, swapChainImageFormat, swapChainExtent);
@@ -119,7 +121,10 @@ private:
 
 	ResourceManager* m_ressourceManager;
 	Scene* Scene;
-	ImguiVulkan imguivulkan;
+
+	// END FRAME TEMP
+	uint32_t imageIndex;
+
 
 	
 	const std::vector<const char*> validationLayers = {
