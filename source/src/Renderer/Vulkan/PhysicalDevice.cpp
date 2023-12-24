@@ -54,7 +54,14 @@ void VkInit::PickPhysicalDevice(VkInstance instance,VkPhysicalDevice& _physicalD
     std::vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
 
-    for (const auto& device : devices) {
+    for (const auto& device : devices)
+    {
+        if(devices.size() > 1) 
+        {
+            _physicalDevice = devices[1];
+            break;
+        }
+
         if (VkInit::IsDeviceSuitable(device, _surface)) {
             _physicalDevice = device;
             break;

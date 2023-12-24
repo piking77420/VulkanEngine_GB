@@ -46,10 +46,6 @@ struct VulkanRendererData
 	std::vector<VkFence> inFlightFences;
 	uint32_t currentFrame = 0;
 
-	VkBuffer vertexBuffer;
-	VkDeviceMemory vertexBufferMemory;
-	VkBuffer indexBuffer;
-	VkDeviceMemory indexBufferMemory;
 
 
 	VkDescriptorSetLayout descriptorSetLayout;
