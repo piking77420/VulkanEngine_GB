@@ -2,7 +2,6 @@
 #include "Core/Core.h"
 #include "Component.hpp"
 #include "System.hpp"
-#include "Renderer/Vulkan/VulkanConfig.hpp"
 #include "Physics/Transform.hpp"
 
 
@@ -162,11 +161,11 @@ public :
 	}
 
 	
-	void Render(VulkanRendererData* datarenderer)
+	void Render()
 	{
 		for (System* sys : systems)
 		{
-			sys->Render(datarenderer,this);
+			sys->Render(this);
 		}
 	}
 

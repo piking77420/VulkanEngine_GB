@@ -9,10 +9,10 @@ class RendereMesh : public System
 
 	void Update(Scene* scene) override;
 
-	void Render(VulkanRendererData* datarenderer, Scene* scene) override;
+	void Render(Scene* scene) override;
 
 	void FixedUpdate(Scene* scene) override;
 private:
-	void BindTexture(VulkanRendererData* datarenderer, Scene* scene, Texture* texture);
+	void BindTexture(Scene* scene, Texture* texture);
 };
 

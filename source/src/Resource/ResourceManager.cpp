@@ -1,13 +1,12 @@
 #include "Resource/ResourceManager.hpp"
-#include "Renderer/Vulkan/VulkanConfig.hpp"
 
-void ResourceManager::DestroyAllResource(VulkanRendererData& _VulkanRendererData)
+void ResourceManager::DestroyAllResource()
 {
 	for (auto it = m_ResourceMap.begin() ; it != m_ResourceMap.end() ; it++)
 	{
 		for (auto at = it->second.begin(); at != it->second.end(); at++)
 		{
-			at->second->Destroy(_VulkanRendererData);
+			at->second->Destroy();
 			delete at->second;
 		}
 	}

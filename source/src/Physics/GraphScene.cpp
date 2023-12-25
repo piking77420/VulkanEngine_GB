@@ -1,6 +1,5 @@
 #include "Physics/GraphScene.h"
 #include "Core/ECS/Scene.hpp"
-#include "Renderer/Vulkan/VulkanConfig.hpp"
 
 void GraphScene::Begin(Scene* scene)
 {
@@ -27,6 +26,3 @@ void GraphScene::FixedUpdate(Scene* scene)
 
 }
 
-void GraphScene::Render(VulkanRendererData* datarenderer, Scene* scene)
-{
-}

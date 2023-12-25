@@ -5,7 +5,7 @@ Camera* Camera::mainCamera = new Camera();
 
 bool IskeyPress(const int& GLFWInput)
 {
-	
+	/*
 	static GLFWwindow* currentContext = VulkanRendererData::window;
 
 	if (!currentContext)
@@ -16,6 +16,9 @@ bool IskeyPress(const int& GLFWInput)
 		return true;
 	}
 	return false;
+	*/
+	return false;
+
 }
 
 

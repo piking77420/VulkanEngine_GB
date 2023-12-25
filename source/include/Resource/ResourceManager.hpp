@@ -2,7 +2,6 @@
 #include "Core/Core.h"
 #include "IResource.hpp"
 
-class VulkanRendererData;
 
 template<class T>
 concept IResourceConcept = std::is_base_of<IResource, T>::value;
@@ -19,9 +18,9 @@ class IRegisterResource : public IResource
 {
 public:
 
-	virtual void LoadResource(const std::string& path, VulkanRendererData& _vulkanRendererData) = 0 ;
+	virtual void LoadResource(const std::string& path) = 0 ;
 
-	virtual void Destroy(VulkanRendererData& data) override = 0;
+	virtual void Destroy() override = 0;
 	
 protected :
 	static inline uint32_t ID = RegisterResource();
@@ -60,7 +59,7 @@ public:
 		//static_assert(std::is_base_of<IRegisterResource, T>," is not a IRessource");
 
 		IResource* newResource = new T();
-		newResource->LoadResource(path,*m_VulkanRender);
+		newResource->LoadResource(path);
 
 
 		m_ResourceMap.at(T::ID).insert({ path ,newResource });
@@ -82,12 +81,11 @@ public:
 		return true;
 	}
 
-	void DestroyAllResource(VulkanRendererData& _VulkanRendererData);
+	void DestroyAllResource();
 
 
-	void GetVulkanRenderer(VulkanRendererData& _vulkanRendererData)
+	void GetVulkanRenderer()
 	{
-		m_VulkanRender = &_vulkanRendererData;
 	}
 
 
@@ -95,7 +93,6 @@ public:
 
 private:
 	std::map<uint32_t, ResourceTypeMap> m_ResourceMap;
-	VulkanRendererData* m_VulkanRender;
 
 };
 

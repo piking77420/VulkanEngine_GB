@@ -5,42 +5,53 @@
 #include "Renderer/MeshRenderer.h"
 #include "ViewPort/Hierachy.hpp"
 #include "ViewPort/SceneView.hpp"
+#include "ViewPort/ContentBrowser.hpp"
+
+void Engine::EngineRun()
+{
+	Camera* cam = Camera::SetMainCamera();
+
+	while (!glfwWindowShouldClose(m_Window))
+	{
+		glfwPollEvents();
+		imguivulkan.ImguiNewFramme();
+		scene.FixedUpdate();
+		cam->UpdateMainCamera();
+		scene.Update();
+		scene.Render();
+		imguivulkan.ImguiEndFramme();
+
+	}
+
+}
 
 Engine::Engine()
 {
 	InitWindow();
-	m_VkRenderer.GetWindow(m_Window);
-	m_VkRenderer.GetScene(&scene);
-	m_VkRenderer.InitVulkan();
-	
 
-	m_ressourceManager.GetVulkanRenderer(m_VkRenderer);
-	m_ressourceManager.Create<Texture>("Texture/viking_room.png");
-	m_VkRenderer.GetRessourceManager(&m_ressourceManager);
-	m_VkRenderer.InitRendering();
-	imguivulkan.InitImgui(&m_VkRenderer, m_Window);
-
-
-	m_ressourceManager.Create<Model>("Model/viking_room.obj");
-	// Init Scene // 
-
-	for (size_t i = 0; i < 5; i++)	
-	{
-		Entity* ent = scene.CreateEntity();
-
-		Transform* transfrom = scene.GetComponent<Transform>(*ent);
-		scene.AddComponent<MeshRenderer>(ent);
-		MeshRenderer* mesh = scene.GetComponent<MeshRenderer>(*ent);
-		mesh->model = m_ressourceManager.GetResource<Model>("Model/viking_room.obj");
-	}
-	
+	VkContext::CreateContext(m_Window);
+	imguivulkan.InitImgui(m_Window);
 
 	scene.AddSystem<GraphScene>();
 	scene.AddSystem<RendereMesh>();
 	scene.AddSystem<Hierachy>();
 	scene.AddSystem<SceneView>();
+	scene.AddSystem<ContentBrowser>();
 
 
 	scene.Begin();
 
+}
+
+Engine::~Engine()
+{
+
+	VkResult err = vkDeviceWaitIdle(VkContext::GetDevice());
+	CheckVkResult(err, "Failed DeviceWaitIdle on destroy Engin");	
+
+
+	imguivulkan.DestroyImgui();
+	VkContext::DestroyContext();
+	glfwDestroyWindow(m_Window);
+	glfwTerminate();
 }

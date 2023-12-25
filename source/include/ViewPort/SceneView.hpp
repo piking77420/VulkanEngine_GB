@@ -1,17 +1,20 @@
 #pragma once
 #include<Core/Core.h>
-#include "Renderer/Vulkan/VulkanHeader.hpp"
 #include "Core/ECS/System.hpp"
+#include "Renderer/Vulkan/VulkanRenderer.hpp"
+
 
 class SceneView : public System
 {
 public:
 
-	virtual void Render(VulkanRendererData* datarenderer, Scene* scene);
+	virtual void Render(Scene* scene);
 
 	SceneView();
 	~SceneView();
 
 private:
-
+	bool m_IsOpen = true;
+	VulkanRenderer m_VulkanRenderer;
+	
 };

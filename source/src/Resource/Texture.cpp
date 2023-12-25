@@ -1,8 +1,6 @@
 #include "Resource/Texture.hpp"
 
-using namespace VkClass;
 
-void Texture::LoadResource(const std::string& path, VulkanRendererData& _vulkanRendererData)
+void Texture::LoadResource(const std::string& path)
 {
-	LoadImage(path,_vulkanRendererData);
 }

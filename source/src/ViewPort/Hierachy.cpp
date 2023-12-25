@@ -2,7 +2,6 @@
 #include "Physics/Transform.hpp"
 #include "Core/ECS/Scene.hpp"
 #include <Imgui/imgui.h>
-#include"Renderer/Vulkan/VulkanHeader.hpp"
 
 
 
@@ -15,7 +14,7 @@ void Hierachy::Update(Scene* scene)
 }
 
 
-void Hierachy::Render(VulkanRendererData* datarenderer, Scene* scene)
+void Hierachy::Render(Scene* scene)
 {
 
 	std::vector<Transform>* transform = scene->GetComponentData<Transform>();

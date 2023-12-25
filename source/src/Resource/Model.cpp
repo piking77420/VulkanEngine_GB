@@ -1,10 +1,10 @@
 #include "Resource/Model.hpp"
 #define TINYOBJLOADER_IMPLEMENTATION
 #include <tiny_obj_loader.h>
-#include "Renderer/Vulkan/Buffer.hpp"
+//#include "Renderer/Vulkan/Buffer.hpp"
 
-void Model::LoadResource(const std::string& path, VulkanRendererData& _vulkanRendererData)
-{
+void Model::LoadResource(const std::string& path)
+{/*
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
@@ -44,16 +44,12 @@ void Model::LoadResource(const std::string& path, VulkanRendererData& _vulkanRen
 
     
     VkUtils::CreateVertexBuffer(_vulkanRendererData, vertices, vertexBuffer,vertexBufferMemory);
-    VkUtils::CreateIndexBuffer(_vulkanRendererData, indices, indexBuffer, indexBufferMemory);
+    VkUtils::CreateIndexBuffer(_vulkanRendererData, indices, indexBuffer, indexBufferMemory);*/
 }
 
-void Model::Destroy(VulkanRendererData& data)
+void Model::Destroy()
 {
+    
 
-    vkDestroyBuffer(data.device, vertexBuffer, nullptr);
-    vkFreeMemory(data.device, vertexBufferMemory, nullptr);
-
-    vkDestroyBuffer(data.device, indexBuffer, nullptr);
-    vkFreeMemory(data.device, indexBufferMemory, nullptr);
 
 }
