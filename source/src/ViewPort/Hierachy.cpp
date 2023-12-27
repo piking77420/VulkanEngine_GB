@@ -14,7 +14,7 @@ void Hierachy::Update(Scene* scene)
 }
 
 
-void Hierachy::Render(Scene* scene)
+void Hierachy::Render(Scene* scene, VulkanRenderer* vkRenderer)
 {
 
 	std::vector<Transform>* transform = scene->GetComponentData<Transform>();

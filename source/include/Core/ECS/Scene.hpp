@@ -15,7 +15,10 @@ public :
 	
 	~Scene()
 	{
-		
+		for(System* sys: systems)
+		{
+			delete sys;
+		}
 	}
 
 	Entity* CreateEntity()
@@ -136,6 +139,21 @@ public :
 		systems.push_back(new T());
 	}
 
+
+	template<class T>
+	T* GetSystem()
+	{
+		for (size_t i = 0; i < systems.size(); i++)
+		{
+			T* tptr = dynamic_cast<T*>(systems[i]);
+			if (tptr != nullptr)
+			{
+				return tptr;
+			}
+		}
+		return nullptr;	
+	}
+
 	void Begin()
 	{
 		for (System* sys : systems)
@@ -161,11 +179,11 @@ public :
 	}
 
 	
-	void Render()
+	void Render(VulkanRenderer* vkRenderer)
 	{
 		for (System* sys : systems)
 		{
-			sys->Render(this);
+			sys->Render(this, vkRenderer);
 		}
 	}
 

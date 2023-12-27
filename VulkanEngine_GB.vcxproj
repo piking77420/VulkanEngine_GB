@@ -136,6 +136,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Renderer\Vulkan\Buffer.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\Descriptor.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\EBO.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\Uniform.cpp" />
     <ClCompile Include="source\src\ViewPort\ContentBrowser.cpp" />
     <ClCompile Include="source\src\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="source\src\Renderer\ImguiImplement\ImguiVulkan.cpp" />
@@ -178,8 +182,15 @@
     <ClCompile Include="source\src\Renderer\Vulkan\VulkanRenderer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\VkSuface.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\SwapChain.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VkShader.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\Vertex.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\Renderer\Vulkan\Buffer.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\Descriptor.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\EBO.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\Uniform.hpp" />
     <ClInclude Include="source\include\ViewPort\ContentBrowser.hpp" />
     <ClInclude Include="source\include\Renderer\Camera\Camera.hpp" />
     <ClInclude Include="source\include\Renderer\ImguiImplement\ImguiVulkan.hpp" />
@@ -231,6 +242,9 @@
     <ClInclude Include="source\include\Renderer\Vulkan\VulkanRenderer.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\VkSuface.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\SwapChain.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VkShader.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\Vertex.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VBO.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="source\src\External\Lib\glfw3.lib" />

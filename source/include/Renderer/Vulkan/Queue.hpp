@@ -16,12 +16,9 @@ namespace VkUtils
 {
     QueueFamilyIndices FindQueueFamilies(VkPhysicalDevice device);
 
-    static inline bool IsDeviceSuitable(const VkPhysicalDevice& device) {
-        QueueFamilyIndices indices = FindQueueFamilies(device);
+    static bool IsDeviceSuitable(const VkPhysicalDevice& device);
+    
 
-        return indices.IsComplete();
-    }
-
-    bool CheckDeviceExtensionSupport(VkPhysicalDevice device, std::vector<const char*> deviceExtensions);
+    bool CheckDeviceExtensionSupport(VkPhysicalDevice device);
     
 }

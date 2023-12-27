@@ -14,7 +14,7 @@ void RendereMesh::Update(Scene* scene)
 
 
 
-void RendereMesh::Render(Scene* scene)
+void RendereMesh::Render(Scene* scene , VulkanRenderer* vkRenderer)
 {
 
 
@@ -24,10 +24,4 @@ void RendereMesh::FixedUpdate(Scene* scene)
 {
 }
 
-void RendereMesh::BindTexture(Scene* scene,Texture* texture)
-{
 
-
-
-
-}

@@ -11,17 +11,25 @@ void Engine::EngineRun()
 {
 	Camera* cam = Camera::SetMainCamera();
 
+	
+
+	
 	while (!glfwWindowShouldClose(m_Window))
 	{
 		glfwPollEvents();
-		imguivulkan.ImguiNewFramme();
+
+		
+		imguivulkan.NewFrame();
+
 		scene.FixedUpdate();
 		cam->UpdateMainCamera();
 		scene.Update();
-		scene.Render();
-		imguivulkan.ImguiEndFramme();
+		m_VulkanRenderer->DrawScene(&scene);
+		//imguivulkan.EndFrame();
+
 
 	}
+	vkDeviceWaitIdle(VkContext::GetDevice());
 
 }
 
@@ -31,12 +39,14 @@ Engine::Engine()
 
 	VkContext::CreateContext(m_Window);
 	imguivulkan.InitImgui(m_Window);
+	m_VulkanRenderer = new VulkanRenderer();
 
 	scene.AddSystem<GraphScene>();
 	scene.AddSystem<RendereMesh>();
-	scene.AddSystem<Hierachy>();
+	//scene.AddSystem<Hierachy>();
 	scene.AddSystem<SceneView>();
-	scene.AddSystem<ContentBrowser>();
+
+	//scene.AddSystem<ContentBrowser>();
 
 
 	scene.Begin();
@@ -46,10 +56,9 @@ Engine::Engine()
 Engine::~Engine()
 {
 
-	VkResult err = vkDeviceWaitIdle(VkContext::GetDevice());
-	CheckVkResult(err, "Failed DeviceWaitIdle on destroy Engin");	
 
-
+	scene.~Scene();
+	delete m_VulkanRenderer; 
 	imguivulkan.DestroyImgui();
 	VkContext::DestroyContext();
 	glfwDestroyWindow(m_Window);

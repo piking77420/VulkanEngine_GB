@@ -1,5 +1,6 @@
 #include "Renderer/Vulkan/Queue.hpp"
 #include "Renderer/Vulkan/VkContext.hpp"
+#include "Renderer/Vulkan/SwapChain.hpp"
 
 QueueFamilyIndices VkUtils::FindQueueFamilies(VkPhysicalDevice device)
 {
@@ -34,7 +35,23 @@ QueueFamilyIndices VkUtils::FindQueueFamilies(VkPhysicalDevice device)
     return indices;
 }
 
-bool VkUtils::CheckDeviceExtensionSupport(VkPhysicalDevice device, std::vector<const char*> deviceExtensions)
+bool VkUtils::IsDeviceSuitable(const VkPhysicalDevice& device)
+{
+    QueueFamilyIndices indices = FindQueueFamilies(device);
+
+    bool extensionsSupported = CheckDeviceExtensionSupport(device);
+
+    bool swapChainAdequate = false;
+    if (extensionsSupported)
+    {
+        SwapChainSupportDetails swapChainSupport = QuerySwapChainSupport(device, VkContext::GetSurface());
+        swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
+    }
+
+    return indices.IsComplete() && extensionsSupported && swapChainAdequate;
+}
+
+bool VkUtils::CheckDeviceExtensionSupport(VkPhysicalDevice device)
 {
     uint32_t extensionCount;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
@@ -42,7 +59,9 @@ bool VkUtils::CheckDeviceExtensionSupport(VkPhysicalDevice device, std::vector<c
     std::vector<VkExtensionProperties> availableExtensions(extensionCount);
     vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
 
-    std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+    std::vector<const char*> deviceExtension = VkContext::GetDeviceExtensions();
+
+    std::set<std::string> requiredExtensions(deviceExtension.begin(), deviceExtension.end());
 
     for (const auto& extension : availableExtensions) {
         requiredExtensions.erase(extension.extensionName);

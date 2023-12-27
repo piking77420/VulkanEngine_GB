@@ -29,14 +29,17 @@ public:
 	}
 
 
+	static inline ImguiVulkan imguivulkan;
+
+	static inline const std::uint32_t m_Widht{ 1920 };
+	static inline const std::uint32_t m_Height{ 1080 };
 private:
 	
-	const std::uint32_t m_Widht{ 1920 };
-	const std::uint32_t m_Height{ 1080 };
+	
 	static inline GLFWwindow* m_Window = nullptr;	
 	Scene scene;
 	ResourceManager m_ressourceManager;
-	ImguiVulkan imguivulkan;
+	VulkanRenderer* m_VulkanRenderer;
 
 
 
@@ -63,7 +66,7 @@ private:
 	static void FramebufferResizeCallback(GLFWwindow* window, int width, int height)
 	{
 		auto vulkanRenderer = reinterpret_cast<Engine*>(glfwGetWindowUserPointer(window));
-		vulkanRenderer->imguivulkan.g_SwapChainRebuild == true;
+		VkContext::FramebufferResized = true;
 
 	}
 };

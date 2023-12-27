@@ -4,7 +4,7 @@
 class ContentBrowser : public System
 {
 public:
-	virtual void Render(Scene* scene) override;
+	virtual void Render(Scene* scene,VulkanRenderer* vkRenderer) override;
 private:
 	bool m_IsOpen = true;
 };
