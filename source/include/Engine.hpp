@@ -38,7 +38,6 @@ private:
 	
 	static inline GLFWwindow* m_Window = nullptr;	
 	Scene scene;
-	ResourceManager m_ressourceManager;
 	VulkanRenderer* m_VulkanRenderer;
 
 

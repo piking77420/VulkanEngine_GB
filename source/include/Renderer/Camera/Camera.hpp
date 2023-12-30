@@ -27,19 +27,22 @@ public :
 	static inline float lastY;
 
 
-	Vector3 front;
-	Vector3 right;
-	Vector3 up;
+	Vector3 front = Vector3::Forward();
+	Vector3 right = Vector3::Right();
+	Vector3 up = Vector3::Up();
 
 	float mouseSesitivity = 0.5f;
 
-	inline Matrix4X4 GetLookMatrix()
+	inline Matrix4X4 GetLookMatrix() const
 	{
 		Vector3 eye = transform.pos;
 		Vector3 at = (transform.pos + Vector3::Forward());
 
 		return Matrix4X4::LookAt(eye, transform.pos + front, up);
 	}
+
+	Matrix4X4 GetProjectionMatrix() const;
+	
 
 
 private : 
@@ -51,6 +54,6 @@ private :
 
 	void CameraRotation();
 	
-
+	float fov;
 };
 

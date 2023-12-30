@@ -21,6 +21,8 @@ public:
 	virtual void LoadResource(const std::string& path) = 0 ;
 
 	virtual void Destroy() override = 0;
+
+	virtual void OnChange() override  = 0;
 	
 protected :
 	static inline uint32_t ID = RegisterResource();
@@ -39,34 +41,42 @@ public:
 	static inline uint32_t GlobalMapResourceID = 0;
 
 	template<class T>
-	T* GetResource(const std::string& name)
+	static T* GetResource(const std::string& name)
 	{
 		//ISIDVALID(T::ID, m_ResourceMap);
+		std::uint32_t id = T::ID;
 
-		return dynamic_cast<T*>(m_ResourceMap.at(T::ID).at(name));
+		return reinterpret_cast<T*>(m_ResourceMap.at(id).at(name));
 	}
+	
+
 	template<class T>
-	const T* GetResource(const std::string& name) const 
+	static void Create(const std::string& path)
 	{
-		ISIDVALID(T::ID, m_ResourceMap);
+		//static_assert(std::is_base_of<IRegisterResource, T>," is not a IRessource");
 
-		m_ResourceMap.at(T::ID).at(name);
+		std::string&& name = std::filesystem::path(path).stem().generic_string();
+		IResource* newResource = new T();
+		newResource->LoadResource(path);
+
+		m_ResourceMap.at(T::ID).insert({ name,newResource});
 	}
 
 	template<class T>
-	void Create(const std::string& path)
+	static void Create()
 	{
 		//static_assert(std::is_base_of<IRegisterResource, T>," is not a IRessource");
 
 		IResource* newResource = new T();
-		newResource->LoadResource(path);
+		newResource->LoadResource("");
 
+		std::string&& name = GetNameFromClassId(typeid(T).name() + ("_" + std::to_string(m_ResourceMap.at(T::ID).size())));
 
-		m_ResourceMap.at(T::ID).insert({ path ,newResource });
+		m_ResourceMap.at(T::ID).insert({ name,newResource });
 	}
 
 	template<class T>
-	bool RemoveResource(const std::string& name) const
+	static bool RemoveResource(const std::string& name)
 	{
 		ISIDVALID(T::ID, m_ResourceMap);
 
@@ -91,9 +101,29 @@ public:
 
 	ResourceManager();
 
-private:
-	std::map<uint32_t, ResourceTypeMap> m_ResourceMap;
+	
 
+	static void AllocateRessouceManager()
+	{
+		if (S_RessourceManager)
+			throw std::exception("try to init a second time a singleton");
+
+		S_RessourceManager = new ResourceManager();
+	}
+
+	static void FreeSingleton()
+	{
+		delete S_RessourceManager;
+	}
+
+private:
+	static inline std::map<uint32_t, ResourceTypeMap> m_ResourceMap;
+	static inline ResourceManager* S_RessourceManager = nullptr;
+
+
+	void LoadAllRessource();
+	
+	static std::string GetNameFromClassId(std::string&& rawName);
 };
 
 static inline uint32_t RegisterResource()

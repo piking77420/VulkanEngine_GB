@@ -2,7 +2,7 @@
 #include "Renderer/Vulkan/Buffer.hpp"
 #include "Renderer/Vulkan/VkContext.hpp"
 #include "Renderer/Vulkan/Vertex.hpp"
-
+#include "Renderer/Vulkan/VulkanRenderer.hpp"
 
 using namespace VkUtils;
 
@@ -10,11 +10,19 @@ using namespace VkUtils;
 
 
 
+void VBO::BindVBO() const
+{
+    VkBuffer buff{ GetBuffer() };
+    VkDeviceSize offsets[] = { 0 };
+
+    vkCmdBindVertexBuffers(VulkanRenderer::GetCurrentCommandBuffer(), 0, 1, &buff, offsets);
+}
+
 void VBO::LoadVBO(const std::vector<Vertex>& verticies)
 {
     const VkDevice& device = VkContext::GetDevice();
 
-    VkDeviceSize bufferSize = sizeof(verticies[0]) * verticies.size();
+    VkDeviceSize bufferSize = sizeof(Vertex) * verticies.size();
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;

@@ -10,6 +10,8 @@
 void ImguiVulkan::InitImgui(GLFWwindow* window)
 {
 	InitImgui();
+
+	
 	CreateImGuiRenderPass();
 	CreateImguiCommandPool(&m_CommandPool);
 	CreateImGuiCommandBuffers();
@@ -35,6 +37,9 @@ void ImguiVulkan::InitImgui(GLFWwindow* window)
 	init_info.CheckVkResultFn = nullptr;
 	ImGui_ImplVulkan_Init(&init_info, m_ImguiRenderPass);
 
+	for (uint32_t i = 0; i < m_Dset.size(); i++)
+		m_Dset[i] = ImGui_ImplVulkan_AddTexture(VkContext::GetGetTextureSampler(), VkContext::GetSwapChainImageViews()[i], VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
 }
 
 void ImguiVulkan::DestroyImgui()
@@ -42,9 +47,12 @@ void ImguiVulkan::DestroyImgui()
 	ImGui_ImplVulkan_Shutdown();
 	ImGui_ImplGlfw_Shutdown();
 	ImGui::DestroyContext();
+	
+
 
 
 	vkDestroyDescriptorPool(VkContext::GetDevice(), m_ImGuiDescriptorPool, nullptr);
+
 
 	for (size_t i = 0; i < m_ImGuiFramebuffers.size(); i++)
 	{
@@ -81,10 +89,19 @@ void ImguiVulkan::EndFrame()
 
 void ImguiVulkan::ImguiRender()
 {
+	
+	ImGui::Begin("Viewport");
+
+	ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+	ImGui::Image(m_Dset[VkContext::GetCurrentFramme()], ImVec2{ viewportPanelSize.x, viewportPanelSize.y });
+
+	ImGui::End();
+
+
 
 	EndFrame();
 
-	vkResetCommandBuffer(m_ImGuiCommandBuffers[0], /*VkCommandBufferResetFlagBits*/ 0);
+	vkResetCommandBuffer(m_ImGuiCommandBuffers[VkContext::GetCurrentFramme()], /*VkCommandBufferResetFlagBits*/ 0);
 	
 
 	vkResetCommandPool(VkContext::GetDevice(), m_CommandPool, 0);
@@ -170,6 +187,12 @@ void ImguiVulkan::InitImgui()
 		if (vkCreateDescriptorPool(VkContext::GetDevice(), &pool_info, nullptr, &m_ImGuiDescriptorPool) != VK_SUCCESS)
 			throw std::runtime_error("Create DescriptorPool for m_ImGuiDescriptorPool failed!");
 	}
+
+
+
+
+
+
 }
 
 void ImguiVulkan::CreateImGuiRenderPass()

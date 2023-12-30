@@ -13,12 +13,16 @@ public:
 	~EBO() {};
 
 
-	VkBuffer GetBuffer()
+	VkBuffer GetBuffer() const
 	{
 		return m_IndexBuffer;
 	}
 
+	void BindEBO() const;
+
 	void LoadEBO(const std::vector<std::uint32_t>& verticies);
+	void LoadEBO(const std::vector<std::uint16_t>& verticies);
+
 	void FreeEBO();
 
 	void operator=(const EBO& vbo);

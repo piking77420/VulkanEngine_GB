@@ -10,17 +10,12 @@ class MakeUniform
 public:
 
 
-	void BindUniform(std::uint32_t currentFramme,const T& updateUniform)
+	void BindUniform(const T& updateUniform)
 	{
-		if (currentFramme > MAX_FRAMES_IN_FLIGHT)
-			return;
-
-
-		std::memcpy(m_uniformBuffersMapped[currentFramme], &updateUniform, sizeof(T));
+		std::memcpy(m_uniformBuffersMapped[VkContext::GetCurrentFramme()], &updateUniform, sizeof(T));
 	}
 
-
-	MakeUniform()
+	void Init()
 	{
 		VkDeviceSize bufferSize = sizeof(T);
 
@@ -31,12 +26,22 @@ public:
 		}
 	}
 
-	~MakeUniform()
+	void Destroy()
 	{
 		for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
 			vkDestroyBuffer(VkContext::GetDevice(), m_uniformBuffers[i], nullptr);
 			vkFreeMemory(VkContext::GetDevice(), m_uniformBuffersMemory[i], nullptr);
 		}
+	}
+
+	MakeUniform()
+	{
+		
+	}
+
+	~MakeUniform()
+	{
+		
 
 	}
 
@@ -46,6 +51,8 @@ public:
 	}
 
 
+	const std::uint32_t SIZE = sizeof(T);
+
 private:
 
 	std::array<VkBuffer, MAX_FRAMES_IN_FLIGHT> m_uniformBuffers;
@@ -54,4 +61,4 @@ private:
 };
 
 
-void CreateDescriptorSetLayout(VkDescriptorSetLayout& descriptorSetLayout);
+void CreateDescriptorSetLayout(VkDescriptorSetLayout* descriptorSetLayout);

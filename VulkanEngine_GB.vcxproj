@@ -136,10 +136,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Resource\Material.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\Depth.cpp" />
+    <ClCompile Include="source\include\Renderer\Vulkan\Depth.hpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\Buffer.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\Descriptor.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\EBO.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\GraphicPipeline.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\Uniform.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VkFormat.cpp" />
+    <ClCompile Include="source\src\Renderer\Vulkan\VkTexture.cpp" />
     <ClCompile Include="source\src\ViewPort\ContentBrowser.cpp" />
     <ClCompile Include="source\src\Renderer\Camera\Camera.cpp" />
     <ClCompile Include="source\src\Renderer\ImguiImplement\ImguiVulkan.cpp" />
@@ -187,10 +193,18 @@
     <ClCompile Include="source\src\Renderer\Vulkan\VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\Resource\Material.hpp" />
+    <ClInclude Include="source\include\External\ExternalLoader.h" />
+    <ClInclude Include="source\include\External\json.hpp" />
+    <ClInclude Include="source\include\External\stb_image_write.h" />
+    <ClInclude Include="source\include\External\tiny_gltf.h" />
     <ClInclude Include="source\include\Renderer\Vulkan\Buffer.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Descriptor.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\EBO.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\GraphicPipeline.hpp" />
     <ClInclude Include="source\include\Renderer\Vulkan\Uniform.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VkFormat.hpp" />
+    <ClInclude Include="source\include\Renderer\Vulkan\VkTexture.hpp" />
     <ClInclude Include="source\include\ViewPort\ContentBrowser.hpp" />
     <ClInclude Include="source\include\Renderer\Camera\Camera.hpp" />
     <ClInclude Include="source\include\Renderer\ImguiImplement\ImguiVulkan.hpp" />

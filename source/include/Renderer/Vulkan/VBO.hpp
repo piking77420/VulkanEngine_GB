@@ -16,10 +16,14 @@ public:
 
 	};
 
-	VkBuffer GetBuffer()
+	VkBuffer GetBuffer() const
 	{
 		return m_VertexBuffer;
 	}
+
+	void BindVBO() const;
+	
+
 
 	void LoadVBO(const std::vector<Vertex>& verticies);
 	void FreeVBO();

@@ -1,12 +1,12 @@
 #include "Renderer/Camera/Camera.hpp"
-
+#include "Engine.hpp"
 
 Camera* Camera::mainCamera = new Camera();
 
 bool IskeyPress(const int& GLFWInput)
 {
-	/*
-	static GLFWwindow* currentContext = VulkanRendererData::window;
+	
+	static GLFWwindow* currentContext = Engine::GetWindow();
 
 	if (!currentContext)
 		return false;
@@ -16,7 +16,7 @@ bool IskeyPress(const int& GLFWInput)
 		return true;
 	}
 	return false;
-	*/
+	
 	return false;
 
 }
@@ -29,7 +29,7 @@ void Camera::UpdateMainCamera()
 	if (!cam)
 		return;
 
-	constexpr float deltatime = 0.003;
+	float deltatime = ImGui::GetIO().DeltaTime;
 
 	Vector3& vec = cam->transform.pos;
 
@@ -93,6 +93,15 @@ void Camera::MouseCallback(GLFWwindow* context, double _xpos, double _ypos)
 
 		if (glfwGetMouseButton(context, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
 			Camera::SetMainCamera()->CameraGetInput(xoffset, yoffset);
+}
+
+Matrix4X4 Camera::GetProjectionMatrix() const
+{
+	float fovRad = fov * Math::Deg2Rad;
+	float aspect = Engine::m_Widht / Engine::m_Height;
+	
+
+	return Matrix4X4::PerspectiveMatrix(fovRad, aspect,0.1,1000);
 }
 
 void Camera::CameraGetInput(float xInput, float yInput)

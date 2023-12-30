@@ -31,10 +31,12 @@ void Hierachy::Render(Scene* scene, VulkanRenderer* vkRenderer)
 			ImGui::CollapsingHeader(("entity " + std::to_string(ptr.entityId)).c_str());
 			ImGui::PushID(ptr.entityId);
 
+			ImGui::PushID("");
 			ImGui::DragFloat3("Pos", ptr.pos.SetPtr());
 			ImGui::DragFloat3("rotation", ptr.rotation.SetPtr());
 
 			ImGui::DragFloat3("scale", ptr.scale.SetPtr());
+			ImGui::PopID();
 
 			ImGui::PopID();
 

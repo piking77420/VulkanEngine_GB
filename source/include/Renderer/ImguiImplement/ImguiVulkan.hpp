@@ -30,6 +30,8 @@ private:
 
 	std::vector<VkCommandBuffer> m_ImGuiCommandBuffers;
 	std::vector<VkFramebuffer> m_ImGuiFramebuffers;
+	std::array<VkDescriptorSet,MAX_FRAMES_IN_FLIGHT> m_Dset;
+
 
 	VkRenderPass m_ImguiRenderPass;
 	VkDescriptorPool m_ImGuiDescriptorPool;

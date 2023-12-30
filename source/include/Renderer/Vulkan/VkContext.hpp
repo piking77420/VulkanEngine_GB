@@ -4,7 +4,7 @@
 #include "Core/Core.h"
 
 struct GLFWwindow;
-
+class VkDepth;
 
 
 static inline void CheckVkResult(VkResult result,const char* messageOnFail)
@@ -130,6 +130,11 @@ public:
 		return m_CurrentFrame;
 	}
 
+	static VkSampler GetGetTextureSampler()
+	{
+		return m_TextureSampler;
+	}
+
 	static void NextFrame();
 	
 	VkContext() = delete;
@@ -138,7 +143,7 @@ public:
 	static void RecreateSwapChain();
 	static inline bool FramebufferResized = false;
 
-
+	static inline std::uint32_t ImageIndex = 0;
 private:
 	static VkInstance m_Instance ;
 	static VkDevice m_Device ;
@@ -152,17 +157,17 @@ private:
 
 
 	static inline VkSwapchainKHR m_SwapChain;
-	static inline std::vector<VkImage> m_SwapChaiImages;
+
+	static inline std::vector<VkFramebuffer> m_SwapChainFramebuffers;
+	static inline std::vector<VkImage> m_SwapChainImages;
 	static inline std::vector<VkImageView> m_SwapChainImageViews;
 
 	static inline VkFormat m_SwapChainImageFormat;
 	static inline VkExtent2D m_SwapChainExtent;
-	static inline std::vector<VkFramebuffer> m_SwapChainFramebuffers;
+
 	static inline VkCommandPool m_CommandPool;
-
-
-
 	static inline VkRenderPass m_RenderPass;
+	static VkDepth vkDepth;
 
 
 	static inline std::vector<VkSemaphore> m_ImageAvailableSemaphores;
@@ -174,6 +179,22 @@ private:
 	static inline std::vector<const char*> layers;
 
 	static inline uint32_t m_CurrentFrame = 0;
+
+	static inline VkSampler m_TextureSampler;
+
+
+	// viewport
+	/*
+	static inline std::vector<VkImage> m_ViewportImages;
+	static inline std::vector<VkDeviceMemory> m_DstImageMemory;
+	static inline std::vector<VkImageView> m_ViewportImageViews;
+	static inline VkRenderPass m_ViewportRenderPass;
+	static inline VkPipeline m_ViewportPipeline;
+	static inline VkCommandPool m_ViewportCommandPool;
+	static inline std::vector<VkFramebuffer> m_ViewportFramebuffers;
+	static inline std::vector<VkCommandBuffer> m_ViewportCommandBuffers;
+	*/
+
 
 
 
@@ -200,8 +221,14 @@ private:
 	static void CreateSyncObjects();
 
 	static void CleanupSwapChain();
-	static void CreateCommandPool();
+	static void CreateCommandPool(VkCommandPool& commandPool);
+	static void CreateTextureSampler();
 	
+
+	// viewPort //
+	static void CreateViewportImage();
+	static void CreateViewportImageViews();
+	static void CreateViewportFrameBuffers();
 
 
 

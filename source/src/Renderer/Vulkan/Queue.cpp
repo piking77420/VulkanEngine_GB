@@ -40,6 +40,8 @@ bool VkUtils::IsDeviceSuitable(const VkPhysicalDevice& device)
     QueueFamilyIndices indices = FindQueueFamilies(device);
 
     bool extensionsSupported = CheckDeviceExtensionSupport(device);
+    VkPhysicalDeviceFeatures supportedFeatures;
+    vkGetPhysicalDeviceFeatures(device, &supportedFeatures);
 
     bool swapChainAdequate = false;
     if (extensionsSupported)
@@ -48,7 +50,7 @@ bool VkUtils::IsDeviceSuitable(const VkPhysicalDevice& device)
         swapChainAdequate = !swapChainSupport.formats.empty() && !swapChainSupport.presentModes.empty();
     }
 
-    return indices.IsComplete() && extensionsSupported && swapChainAdequate;
+    return indices.IsComplete() && extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
 }
 
 bool VkUtils::CheckDeviceExtensionSupport(VkPhysicalDevice device)

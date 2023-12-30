@@ -4,6 +4,8 @@
 #include "Renderer/Vulkan/VBO.hpp"
 #include "Renderer/Vulkan/EBO.hpp"
 #include "Renderer/Vulkan/Uniform.hpp"
+#include "Resource/Texture.hpp"
+#include "Resource/Model.hpp"
 
 class VkContext;
 
@@ -18,34 +20,48 @@ public:
 	virtual void DrawScene(Scene* scene);
 
 	VulkanRenderer();
+
 	virtual	~VulkanRenderer();
 
+	static const VkCommandBuffer const& GetCurrentCommandBuffer()
+	{
+		return *currentCommandBuffer;
+	}
+
+
+	static inline std::vector<VkDescriptorSet> m_DescriptorSets;
 private:
 
 	friend VkContext;
 	virtual void DrawFrame(Scene* scene);
 
-	void CreateGraphicsPipeline();
 	virtual void CreateCommandBuffer();
 
-	void RecordCommandBuffer(VkCommandBuffer& commandBuffer, Scene* scene, uint32_t imageIndex);
-	Camera m_cam;
+	void RecordCommandBuffer(VkCommandBuffer& commandBuffer, Scene* scene);
+
+
+
+	void DrawStaticMesh(Scene& scene);
+
+	Camera* m_cam = nullptr;
+	const Model* modelToDraw = nullptr;
 
 	MakeUniform<UniformBufferObject> m_CameraUniform;
 
+	// Draw Non Unique Class  // 
 	VkDescriptorSetLayout m_DesriptorSetLayout;
 	VkPipelineLayout m_PipelineLayout;
 	VkPipeline m_GraphicsPipeline;
 
+	VkDescriptorPool m_DescriptorPool;
 	std::vector<VkCommandBuffer> m_CommandBuffers;
+	// // // 
+
+
 	MakeUniform<UniformBufferObject> m_UniformBufferObject;
 
 
-	VkDescriptorPool m_DescriptorPool;
-	std::vector<VkDescriptorSet> m_DescriptorSets;
 
-	VBO vbo;
-	EBO ebo;
-
+	static inline VkCommandBuffer* currentCommandBuffer = nullptr;
 };
 

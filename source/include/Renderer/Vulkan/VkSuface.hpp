@@ -6,4 +6,6 @@
 namespace VkUtils
 {
 	VkSurfaceKHR CreateSurface();
+
 }
+
