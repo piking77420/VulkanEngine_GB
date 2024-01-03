@@ -39,28 +39,7 @@ private:
 
 	void RecordCommandBuffer(VkCommandBuffer& commandBuffer, Scene* scene);
 
-
-
-	void DrawStaticMesh(Scene& scene);
-
-	Camera* m_cam = nullptr;
-	const Model* modelToDraw = nullptr;
-
-	MakeUniform<UniformBufferObject> m_CameraUniform;
-
-	// Draw Non Unique Class  // 
-	VkDescriptorSetLayout m_DesriptorSetLayout;
-	VkPipelineLayout m_PipelineLayout;
-	VkPipeline m_GraphicsPipeline;
-
-	VkDescriptorPool m_DescriptorPool;
 	std::vector<VkCommandBuffer> m_CommandBuffers;
-	// // // 
-
-
-	MakeUniform<UniformBufferObject> m_UniformBufferObject;
-
-
 
 	static inline VkCommandBuffer* currentCommandBuffer = nullptr;
 };

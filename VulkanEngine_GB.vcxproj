@@ -136,6 +136,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="source\src\Renderer\Vulkan\FrameBuffer.cpp" />
     <ClCompile Include="source\src\Resource\Material.cpp" />
     <ClCompile Include="source\src\Renderer\Vulkan\Depth.cpp" />
     <ClCompile Include="source\include\Renderer\Vulkan\Depth.hpp" />
@@ -193,6 +194,7 @@
     <ClCompile Include="source\src\Renderer\Vulkan\VBO.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="source\include\Renderer\Vulkan\FrameBuffer.hpp" />
     <ClInclude Include="source\include\Resource\Material.hpp" />
     <ClInclude Include="source\include\External\ExternalLoader.h" />
     <ClInclude Include="source\include\External\json.hpp" />

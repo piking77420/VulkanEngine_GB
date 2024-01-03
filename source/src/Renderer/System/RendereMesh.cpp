@@ -16,7 +16,7 @@
 #include "Renderer/Vulkan/VulkanRenderer.hpp"
 #include "Engine.hpp"
 #include "Resource/Model.hpp"
-
+#include "Renderer/ImguiImplement/ImguiVulkan.hpp"
 
 void RendereMesh::Begin(Scene* scene)
 {
@@ -40,6 +40,7 @@ void RendereMesh::Render(Scene* scene , VulkanRenderer* vkRenderer)
 	renderPassInfo.renderPass = m_RenderPass;
 	// Get NextFrame ImageIndex != currentFrame
 	renderPassInfo.framebuffer = VkContext::GetSwapChainFramebuffers()[VkContext::ImageIndex];
+
 	renderPassInfo.renderArea.offset = { 0, 0 };
 	renderPassInfo.renderArea.extent = VkContext::GetSwapChainVkExtent();
 

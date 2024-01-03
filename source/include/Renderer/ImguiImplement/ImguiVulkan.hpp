@@ -18,6 +18,10 @@ public :
 
 	void OnResizeFrammebuffer();
 
+	std::vector<VkCommandBuffer> m_ImGuiCommandBuffers;
+	std::vector<VkFramebuffer> m_ImGuiFramebuffers;
+	static inline std::array<VkDescriptorSet, MAX_FRAMES_IN_FLIGHT> m_Dset;
+
 private:
 
 	void InitImgui();
@@ -28,9 +32,7 @@ private:
 
 	void FrameRender(ImGui_ImplVulkanH_Window* wd, ImDrawData* draw_data);
 
-	std::vector<VkCommandBuffer> m_ImGuiCommandBuffers;
-	std::vector<VkFramebuffer> m_ImGuiFramebuffers;
-	std::array<VkDescriptorSet,MAX_FRAMES_IN_FLIGHT> m_Dset;
+
 
 
 	VkRenderPass m_ImguiRenderPass;

@@ -42,7 +42,7 @@ Engine::Engine()
 	m_VulkanRenderer = new VulkanRenderer();
 
 	scene.AddSystem<GraphScene>();
-	//scene.AddSystem<Hierachy>();
+	scene.AddSystem<Hierachy>();
 	scene.AddSystem<RendereMesh>();
 	//scene.AddSystem<SceneView>();
 
