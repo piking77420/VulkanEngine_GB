@@ -69,11 +69,6 @@ void VkContext::DestroyContext()
 		vkDestroyFence(VkContext::GetDevice(), m_InFlightFences[i], nullptr);
 	}
 
-
-	for (auto imageView : m_SwapChainImageViews) {
-		vkDestroyImageView(m_Device, imageView, nullptr);
-	}
-
 	vkDestroyDevice(m_Device, nullptr);
 
 	if (EnableValidationLayers) {
